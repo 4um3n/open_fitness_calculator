@@ -1,0 +1,53 @@
+{% extends "core/base.html" %}
+{% block page-title %}
+    <title>{{ exercise.name }}</title>
+{% endblock %}
+{% block main-content %}
+    <main class="main exercises">
+        <form class="food-form" method="post">
+            {% csrf_token %}
+            <section class="heading-wrapper food">
+                <p class="food-name food exercise">
+                    {% block exercise_name %}
+                    {% endblock %}
+                </p>
+
+                <div class="buttons-wrapper food">
+
+                    {#                    {% if form.quantity %}#}
+                    {#                        <section class="quantity-wrapper">#}
+                    {#                            <article class="form-wrapper-food exercise">#}
+                    {#                                {% block form %}#}
+                    {#                                {% endblock %}#}
+                    {#                            </article>#}
+                    {#                        </section>#}
+                    {#                    {% endif %}#}
+
+                    {% block buttons %}
+                    {% endblock %}
+                </div>
+
+            </section>
+
+            {% if form.quantity %}
+                <section class="quantity-wrapper">
+                    <article class="form-wrapper-food exercise">
+                        {% block form %}
+                        {% endblock %}
+                    </article>
+                </section>
+            {% endif %}
+
+            {% block burned_calories %}
+            {% endblock %}
+
+            {% block unit %}
+            {% endblock %}
+
+            {% block errors %}
+            {% endblock %}
+
+
+        </form>
+    </main>
+{% endblock %}

@@ -1,0 +1,84 @@
+{% extends "core/base_nutrition.html" %}
+{% block macros-active %}
+    active
+{% endblock %}
+{% block main-content %}
+    <main class="main profile-nutrition">
+        <form method="post">
+            {% csrf_token %}
+            <section class="pie-chart-section">
+                <div class="pie-chart-wrapper">
+                    <img class="pie-chart" src="{{ diary.macrospiechart.image.url }}" alt="pie-chart">
+                </div>
+            </section>
+
+            <section class="macros-wrapper">
+                <article class="macros-labels-wrapper">
+                    <div class="macros-labels">
+                        <span class="data-macros">Total</span>
+                        <span class="data-macros">Goal</span>
+                    </div>
+                </article>
+
+                <article class="macros-data-wrapper">
+                    <div class="color-wrapper">
+                        <div class="macros-color protein"></div>
+                        <span class="macros-data-label">
+                        Protein({{ protein_grams|floatformat:2 }}g)
+                    </span>
+                    </div>
+                    <div class="macros-data">
+                    <span class="macros-eaten-percents">
+                        {{ eaten_protein_percent|floatformat:0 }}%
+                    </span>
+                        <article class="form-wrapper-macros">
+                        <span class="macros-total-percents">
+                            {{ form.protein }}%
+                        </span>
+                        </article>
+                    </div>
+                </article>
+                <article class="macros-data-wrapper">
+                    <div class="color-wrapper">
+                        <div class="macros-color carbs"></div>
+                        <span class="macros-data-label">
+                        Carbohydrates({{ carbs_grams|floatformat:2 }}g)
+                    </span>
+                    </div>
+                    <div class="macros-data">
+                    <span class="macros-eaten-percents">
+                        {{ eaten_carbs_percents|floatformat:0 }}%
+                    </span>
+                        <article class="form-wrapper-macros">
+                        <span class="macros-total-percents">
+                            {{ form.carbs }}%
+                        </span>
+                        </article>
+                    </div>
+                </article>
+                <article class="macros-data-wrapper">
+                    <div class="color-wrapper">
+                        <div class="macros-color fats"></div>
+                        <span class="macros-data-label">
+                        Fat({{ fat_grams|floatformat:2 }}g)
+                    </span>
+                    </div>
+                    <div class="macros-data">
+                    <span class="macros-eaten-percents">
+                        {{ eaten_fat_percents|floatformat:0 }}%
+                    </span>
+                        <article class="form-wrapper-macros">
+                        <span class="macros-total-percents">
+                            {{ form.fat }}%
+                        </span>
+                        </article>
+                    </div>
+                </article>
+            </section>
+            <input type="submit" class="btn btn-primary macros" value="Update Percentages">
+            <section class="form-errors">
+                {{ form.protein.errors }}
+            </section>
+        </form>
+    </main>
+{% endblock %}

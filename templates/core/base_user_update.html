@@ -1,0 +1,23 @@
+{% extends "core/base.html" %}
+{% block title %}
+    <title>Update User</title>
+{% endblock %}
+{% block main-content %}
+    <main class="main profile">
+        <form method="post" enctype="multipart/form-data" class="profile-form">
+            {% csrf_token %}
+
+            <div class="profile-picture-wrapper">
+                <img src="{{ profile.profile_picture.url }}" alt="profile">
+                {% block update-password %}
+                {% endblock %}
+            </div>
+
+            {% block form-data %}
+            {% endblock %}
+
+            <input type="submit" value="UPDATE" class="btn btn-primary user">
+
+        </form>
+    </main>
+{% endblock %}

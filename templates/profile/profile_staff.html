@@ -1,0 +1,61 @@
+{% extends "core/base.html" %}
+{% block title %}
+    <title>Staff</title>
+{% endblock %}
+{% block main-content %}
+    <main class="main profile staff">
+
+        {% if not profiles_requested_staff and not profiles_staff %}
+            <h1>No Staff and No Requests for Staff</h1>
+
+        {% endif %}
+
+
+        {% if profiles_requested_staff %}
+            <h2>Requests</h2>
+        {% endif %}
+        <section class="staff-wrapper">
+            {% for profile, form in profiles_requested_staff %}
+                <div class="card-wrapper">
+                    <div class="card">
+                        <form action="{% url "staff" profile.pk %}" method="post" class="staff-form">
+                            {% csrf_token %}
+                            <label class="staff-name-wrapper">
+                                <h3>{{ profile.user.username }}</h3>
+                                {{ form.is_staff }}
+                                <span onclick="clickStaffCardButton({{ profile.pk }})" class="checkmark"></span>
+                            </label>
+                            <input id="id_card_button_staff_{{ profile.pk }}" type="submit"
+                                   class="btn btn-primary card-button staff" value="UPDATE" hidden="hidden">
+                        </form>
+                    </div>
+                </div>
+            {% endfor %}
+        </section>
+
+        {% if profiles_staff %}
+            <h2>Staff</h2>
+        {% endif %}
+        <section class="staff-wrapper">
+            {% for profile, form in profiles_staff %}
+                <div class="card-wrapper">
+                    <div class="card">
+                        <form action="{% url "staff" profile.pk %}" method="post" class="staff-form">
+                            {% csrf_token %}
+                            <label class="staff-name-wrapper">
+                                <h3>{{ profile.user.username }}</h3>
+                                {{ form.is_staff }}
+                                <span onclick="clickStaffCardButton({{ profile.pk }})" class="checkmark"></span>
+                            </label>
+                            <input id="id_card_button_staff_{{ profile.pk }}" type="submit"
+                                   class="btn btn-primary card-button staff" value="UPDATE" hidden="hidden">
+                        </form>
+                    </div>
+                </div>
+            {% endfor %}
+        </section>
+
+
+        <script src="/static/profiles/js/profile.js"></script>
+    </main>
+{% endblock %}

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" class="auth">
+<head>
+    <meta charset="UTF-8">
+    {% block title %}
+        <title></title>
+    {% endblock %}
+    <link rel="stylesheet" href="/static/core/css/styles.css">
+    <script src="https://kit.fontawesome.com/a866a01a60.js" crossorigin="anonymous"></script>
+</head>
+<body class="auth">
+<heading>
+    {% include "core/navigation_auth.html" %}
+</heading>
+{% block main %}
+{% endblock %}
+</body>
+</html>

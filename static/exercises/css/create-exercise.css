@@ -1,0 +1,68 @@
+.quantity-wrapper.exercise {
+    margin: 0;
+}
+
+.form-wrapper-exercise {
+    font-size: 25px;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: flex-end;
+    align-items: center;
+    width: 100%;
+    margin: 0;
+}
+
+.form-control.exercise {
+    text-align: right;
+    border: none;
+    border-radius: 0;
+    padding: 2px 0 2px 10px;
+    font-size: 18px;
+    background: rgb(255, 255, 255);
+    color: rgba(14, 19, 25, 1);
+}
+
+.form-control.exercise.left {
+    text-align: left;
+    font-size: 21px;
+
+}
+.form-control.exercise:focus {
+    outline: 0;
+    box-shadow: none;
+}
+
+.form-control.exercise.burned-calories {
+    width: 180px;
+    margin-right: 5px;
+    font-size: 25px;
+}
+
+.form-control.exercise.burned-calories::-webkit-outer-spin-button,
+.form-control.exercise.burned-calories::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.form-control.exercise.burned-calories {
+    -moz-appearance: textfield;
+}
+
+select.form-control.exercise {
+    max-width: fit-content;
+    padding: 0;
+    margin: 0 2px 0 5px;
+    font-size: 23px;
+}
+select.form-control.exercise:hover {
+    cursor: pointer;
+}
+
+
+.food-name.food.exercise {
+    font-size: 25px !important;
+    opacity: 1;
+    overflow-x: scroll;
+    overflow-y: hidden;
+}
+

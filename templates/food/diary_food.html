@@ -1,0 +1,120 @@
+{% extends "food/../core/base_food.html" %}
+
+{% block food_name %}
+    {{ meal.food.name }}
+{% endblock %}
+
+{% block buttons %}
+    <div class="buttons">
+        <input type="submit" value="UPDATE" class="btn btn-primary food">
+        <a class="btn delete-food food" href="{% url "delete food from diary" diary_pk meal.pk %}">
+            DELETE
+        </a>
+    </div>
+{% endblock %}
+
+{% block form %}
+    {{ form.quantity }}g
+    {{ form.quantity.errors }}
+{% endblock %}
+
+{% block ingredients %}
+    {% if ingredients %}
+        <section class="description food">
+            <p id="description">{{ meal.food.ingredients }}</p>
+        </section>
+    {% endif %}
+{% endblock %}
+
+{% block pie_chart_url %}
+    {{ meal.food.foodpiechart.image.url }}
+{% endblock %}
+
+{% block protein_percents %}
+    {{ protein_percents }}
+{% endblock %}
+{% block protein_grams %}
+    {{ protein | floatformat:2 }}
+{% endblock %}
+
+{% block carbs_percents %}
+    {{ carbs_percents }}
+{% endblock %}
+{% block carbs_grams %}
+    {{ carbs | floatformat:2 }}
+{% endblock %}
+
+{% block fat_percents %}
+    {{ fat_percents }}
+{% endblock %}
+{% block fat_grams %}
+    {{ fat | floatformat:2 }}
+{% endblock %}
+
+{% block energy %}
+    {{ energy }}
+{% endblock %}
+
+{% block carbs %}
+    {{ carbs | floatformat:2 }}
+{% endblock %}
+
+{% block fiber %}
+    {{ fiber | floatformat:2 }}
+{% endblock %}
+
+{% block sugars %}
+    {{ sugars | floatformat:2 }}
+{% endblock %}
+
+{% block protein %}
+    {{ protein | floatformat:2 }}
+{% endblock %}
+
+{% block calcium %}
+    {{ calcium | floatformat:2 }}
+{% endblock %}
+
+{% block iron %}
+    {{ iron | floatformat:2 }}
+{% endblock %}
+
+{% block vitamin_a %}
+    {{ vitamin_a | floatformat:2 }}
+{% endblock %}
+
+{% block vitamin_c %}
+    {{ vitamin_c | floatformat:2 }}
+{% endblock %}
+
+{% block fat %}
+    {{ fat | floatformat:2 }}
+{% endblock %}
+
+{% block saturated_fat %}
+    {{ saturated_fat | floatformat:2 }}
+{% endblock %}
+
+{% block monounsaturated_fat %}
+    {{ monounsaturated_fat | floatformat:2 }}
+{% endblock %}
+
+{% block polyunsaturated_fat %}
+    {{ polyunsaturated_fat | floatformat:2 }}
+{% endblock %}
+
+{% block trans_fat %}
+    {{ trans_fat | floatformat:2 }}
+{% endblock %}
+
+{% block cholesterol %}
+    {{ cholesterol | floatformat:2 }}
+{% endblock %}
+
+{% block sodium %}
+    {{ sodium | floatformat:2 }}
+{% endblock %}
+
+{% block potassium %}
+    {{ potassium | floatformat:2 }}
+{% endblock %}

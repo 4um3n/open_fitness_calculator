@@ -1,0 +1,97 @@
+.macros-wrapper {
+    font-size: 21px;
+}
+
+.macros-labels-wrapper {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: flex-end;
+}
+
+.macros-data-wrapper {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+}
+
+.color-wrapper {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.macros-color {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    margin-right: 5px;
+    background: white;
+}
+
+.macros-color.protein {
+    background: rgba(1, 114, 80, 1);
+}
+
+.macros-color.carbs {
+    background: rgba(255, 128, 0, 1);
+}
+
+.macros-color.fats {
+    background: rgba(255, 0, 98, 1);
+}
+
+.macros-labels,
+.macros-data {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    width: 135px;
+}
+
+.macros-labels span,
+.macros-eaten-percents,
+.form-wrapper-macros {
+    margin: 0 10px;
+    width: 48% !important;
+}
+
+.macros-total-percents {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: flex-end;
+    width: 100% !important;
+}
+
+.form-control-macros {
+    -moz-appearance: textfield;
+    text-align: right;
+    width: 100%;
+    border: none;
+}
+
+.form-control-macros:focus {
+    border: none;
+    outline: none;
+    box-shadow: none;
+}
+
+
+.form-control-macros::-webkit-outer-spin-button,
+.form-control-macros::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.btn.btn-primary.macros {
+    text-transform: uppercase;
+    width: 100%;
+    margin: 10px auto;
+}
+
+@media only screen and (min-device-width: 300px) and (max-device-width: 540px) {
+    .form-wrapper.macros {
+        width: 48% !important;
+    }
+}

@@ -1,0 +1,20 @@
+<nav class="nav top-nav primary">
+    <div class="logo-wrapper">
+        <a href="{% url "home" %}" class="logo">
+            <i class="fa-solid fa-carrot"></i>
+            OpenFitnessCalculator
+        </a>
+    </div>
+    <div class="auth-buttons-wrapper">
+        <div class="auth-buttons">
+            <a class="left" href="{% url "sign in" %}">
+                <i class="fas fa-key"></i>
+                Sign In
+            </a>
+            <a class="right" href="{% url "sign up" %}">
+                <i class="fa-solid fa-right-to-bracket"></i>
+                Sign Up
+            </a>
+        </div>
+    </div>
+</nav>

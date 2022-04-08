@@ -1,0 +1,11 @@
+{% extends "food/food.html" %}
+
+{% block buttons %}
+    <div class="buttons">
+        <input class="btn btn-primary food log" type="submit" value="LOG  FOOD">
+    </div>
+{% endblock %}
+
+{% block form %}
+    {{ form.quantity }}g
+{% endblock %}

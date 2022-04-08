@@ -1,0 +1,98 @@
+{% extends "fitness_calculator/../core/base.html" %}
+{% block page-title %}
+    <title>Home</title>
+{% endblock %}
+{% block styles %}
+    <link rel="stylesheet" href="/static/core/css/home.css">
+{% endblock %}
+{% block main-content %}
+    <main class="main home">
+        <h1>Calories</h1>
+
+        <section class="calories-wrapper home">
+            <article class="calories-content home">
+                <div>
+                    <p id="calories">{{ calories }}</p>
+                    <label for="calories">Goal</label>
+                </div>
+                <p>-</p>
+
+                <div>
+                    <p id="food">{{ eaten_calories }}</p>
+                    <label for="food">Food</label>
+                </div>
+                <p>+</p>
+
+                <div>
+                    <p id="exercise">{{ exercises_calories }}</p>
+                    <label for="exercise">Exercise</label>
+                </div>
+                <p>=</p>
+
+                <div>
+                    <p id="remaining">{{ remaining_calories }}</p>
+                    <label for="remaining">Remaining</label>
+                </div>
+            </article>
+        </section>
+
+        <form class="form search-food-repo" method="post">
+            {% csrf_token %}
+            <div class="search-bar-wrapper">
+                <label class="info" for="id_searched_string">
+                    Search food in
+                    <a href="https://www.foodrepo.org/">The Open Food Repo</a>
+                </label>
+                {{ form.searched_string.errors }}
+                <div class="search-bar-over">
+                    {{ form.searched_string }}
+                </div>
+                <button type="submit" class="btn search-food-repo">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+
+                <label class="accurate-search-wrapper">
+                    {{ form.accurate_search }}
+                    <span class="info">
+                        Accurate results
+                    </span>
+                    <span class="checkmark"></span>
+                </label>
+            </div>
+        </form>
+
+        <section class="found-food">
+            {% if food %}
+                {% include "core/navigation_home.html" %}
+            {% endif %}
+            {% for name, data in food %}
+                <div class="card-wrapper">
+                    <div class="card">
+                        <h3>{{ name }}</h3>
+                        {% for title, value in data %}
+                            {% if title == "food_id" %}
+                                <a href="{% url "save locally open food" value %}" class="btn btn-primary card-button">
+                                    Details
+                                </a>
+                            {% else %}
+                                <p>
+                                    {% if title == "energy" %}
+                                        <i class="fa-solid fa-fire-flame-curved"></i>
+                                    {% elif title == "protein" %}
+                                        <i class="fa-solid fa-bacon"></i>
+                                    {% elif title == "carbs" %}
+                                        <i class="fa-solid fa-wheat-awn"></i>
+                                    {% elif title == "fat" %}
+                                        <i class="fa-solid fa-bottle-droplet"></i>
+                                    {% endif %}
+                                    <span style="text-transform: capitalize">{{ title }}</span>
+                                    <span>{{ value }}</span>
+                                </p>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endfor %}
+        </section>
+    </main>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends "core/base_exercise.html" %}
+
+{% block exercise_name %}
+    {{ diary_exercise.exercise.name }}
+{% endblock %}
+
+{% block buttons %}
+    <div class="buttons">
+        <input type="submit" value="UPDATE" class="btn btn-primary food">
+        <a class="btn delete-food food" href="{% url "delete exercise from diary" diary_pk diary_exercise.pk %}">
+            DELETE
+        </a>
+    </div>
+{% endblock %}
+
+{% block form %}
+    {{ form.quantity }}
+    <span style="white-space: nowrap; margin-left: 10px; font-size: 25px;">
+        {{ diary_exercise.exercise.unit }}
+    </span>
+{% endblock %}
+
+{% block errors %}
+    {{ form.errors }}
+{% endblock %}
+
+{% block burned_calories %}
+    <h2>
+        {{ burned_calories }} cals burned for {{ diary_exercise.quantity }} {{ diary_exercise.exercise.unit }}
+    </h2>
+{% endblock %}

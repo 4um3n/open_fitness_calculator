@@ -1,0 +1,24 @@
+{% extends "core/base_exercise.html" %}
+
+{% block exercise_name %}
+    {{ exercise.name }}
+{% endblock %}
+
+{% block buttons %}
+    <div class="buttons">
+        <input class="btn btn-primary food log" type="submit" value="LOG  EXERCISE">
+    </div>
+{% endblock %}
+
+{% block form %}
+    {{ form.quantity }}
+    <span style="white-space: nowrap; margin-left: 10px;">
+        {{ exercise.unit }}
+    </span>
+{% endblock %}
+
+{% block burned_calories %}
+    <h2>
+        {{ exercise.burned_calories_per_unit }} cals burned per {{ exercise.unit }}
+    </h2>
+{% endblock %}

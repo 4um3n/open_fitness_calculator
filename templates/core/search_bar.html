@@ -1,0 +1,12 @@
+<form class="form search-food-repo list-food" method="post">
+    {% csrf_token %}
+    <div class="search-bar-wrapper">
+        {{ form.searched_string.errors }}
+        <div class="search-bar-over">
+            {{ form.searched_string }}
+        </div>
+        <button type="submit" class="btn search-food-repo list-food">
+            <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+    </div>
+</form>

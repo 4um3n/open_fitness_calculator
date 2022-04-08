@@ -1,0 +1,253 @@
+.main.food {
+    padding: 21px 10px;
+}
+
+.food-form {
+    padding: 0;
+}
+
+
+.heading-wrapper.food {
+    margin: 0 !important;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding: 0 !important;
+    border: none !important;
+    border-radius: 0 !important;
+}
+
+.food-name.food {
+    white-space: nowrap;
+    line-height: 0.8;
+    margin: auto 10px auto 0;
+    font-size: 25px !important;
+    opacity: 1;
+    overflow-x: scroll;
+    overflow-y: hidden;
+}
+
+.buttons-wrapper.food {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: flex-end;
+}
+
+.buttons {
+    box-sizing: content-box;
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: space-between;
+    width: fit-content;
+}
+
+.quantity-wrapper {
+    font-size: 21px;
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: flex-end;
+    margin-right: 10px;
+}
+
+.form-wrapper-food {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: flex-end;
+    align-items: center;
+    width: 140px;
+    margin: 0;
+    /*border-bottom: 2px solid rgba(0, 76, 120, 1);*/
+}
+
+.form-control.food-quantity {
+    font-size: 21px;
+    -moz-appearance: textfield;
+    display: inline-block;
+    width: 100%;
+    text-align: right;
+    border: none;
+    padding: 0;
+}
+
+.form-control.food-quantity:focus {
+    box-shadow: none;
+}
+
+
+.form-control.food-quantity::-webkit-outer-spin-button,
+.form-control.food-quantity::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.form-control.food-quantity:focus {
+    border: none;
+}
+
+.btn.btn-primary.food {
+    font-size: 14px;
+    text-decoration: none;
+    border-radius: 4px;
+    margin: 5px 2px;
+    padding: 4px 10px;
+}
+
+.btn.btn-primary.food.log {
+    width: 100%;
+}
+
+
+/*Description*/
+.description.food {
+    max-height: none !important;
+    text-align: center;
+    margin-top: 0 !important;
+    padding: 10px 0;
+    border: 2px solid rgba(0, 0, 0, 1) !important;
+    border-radius: 0 0 8px 8px;
+}
+
+.description.food > p {
+    font-size: 19px;
+    opacity: 1;
+    margin: 0 !important;
+    color: inherit;
+}
+
+
+/* Calories */
+.calories-wrapper.food {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    border: none !important;
+    max-height: 500px !important;
+    min-height: 100px !important;
+    text-align: center;
+    padding: 0 !important;
+    margin: 25px 0 !important;
+}
+
+.pie-chart.wrapper.food {
+    display: inline-block !important;
+    margin: 0 !important;
+}
+
+img.chart {
+    max-width: 180px;
+}
+
+
+.percentages-wrapper.food {
+    display: flex;
+    flex-wrap: nowrap;
+}
+
+.percentages.food {
+    vertical-align: middle;
+    white-space: nowrap;
+    margin: 10px 25px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.percentages.food p {
+    letter-spacing: 0;
+    font-weight: normal;
+    margin: 0 auto;
+}
+
+p.protein-percents {
+    color: rgb(1, 114, 80) !important;
+}
+
+p.carbs-percents {
+    color: rgb(255, 128, 0) !important;
+}
+
+p.fat-percents {
+    color: rgb(255, 0, 98) !important;
+}
+
+p.grams {
+    font-size: 22px;
+    font-weight: bold !important;
+}
+
+p.text {
+    font-size: 14px;
+}
+
+
+/*Nutritional Info*/
+.nutritional-info.heading {
+    font-weight: bold;
+    letter-spacing: 1px;
+    color: inherit;
+}
+
+.nutritional-info.wrapper {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    font-size: 21px;
+}
+
+.nutritional-info.left, .nutritional-info.right {
+    /*min-width: fit-content;*/
+    max-height: max-content !important;
+    padding: 0 !important;
+    width: 49.5%;
+    overflow: hidden;
+    line-height: 1px;
+}
+
+.nutritional-info.left {
+    margin-right: 5px;
+}
+
+
+div.main-macros,
+div.more-macros {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    overflow: hidden;
+    padding: 5px 0 !important;
+    border: none !important;
+    border-radius: 0 !important;
+    border-bottom: 1px solid rgba(14, 19, 25, 0.5) !important;
+}
+
+label.main-macros, p.main-macros {
+    white-space: nowrap;
+    margin-left: 2px;
+    color: inherit;
+}
+
+label.more-macros, p.more-macros {
+    white-space: nowrap;
+    display: inline-block;
+    margin-left: 2px;
+    color: inherit;
+}
+
+p.main-macros, p.more-macros {
+    margin: 0 2px;
+    line-height: normal;
+}
+
+@media screen and (max-width: 550px) {
+    .nutritional-info.wrapper {
+        display: block;
+    }
+
+    .nutritional-info.left, .nutritional-info.right {
+        width: 100% !important;
+        border: none !important;
+    }
+}

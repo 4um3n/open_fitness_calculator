@@ -1,0 +1,60 @@
+{% extends "core/base_auth.html" %}
+{% block title %}
+    <title>Sign Up</title>
+{% endblock %}
+{% block main %}
+    <div class="form-wrapper">
+        <form method="post" class="auth-form">
+            <div class="nav-wrapper auth">
+                <a href="{% url "sign in" %}" class="heading-login">
+                    <i class="fas fa-key"></i>
+                    Sign In
+                </a>
+                <a href="{% url "sign up" %}" class="heading-register">
+                    <i class="fa-solid fa-right-to-bracket"></i>
+                    Sign Up
+                </a>
+            </div>
+            {% csrf_token %}
+            {{ form.username }}
+            {{ form.username.errors }}
+            {{ form.email }}
+            {{ form.email.errors }}
+            {{ form.password1 }}
+            {{ form.password2.errors }}
+            {{ form.password2 }}
+            <input type="submit" class="btn btn-primary auth" value="Sign Up">
+        </form>
+    </div>
+
+    <script>
+        let inputs = document.querySelectorAll(".form-control-gender input[type=radio]");
+        Array.from(inputs).forEach(function (elem) {
+
+            elem.addEventListener('change', function (a) {
+
+                Array.from(inputs).forEach(function (z) {
+                    if (z.parentNode.classList.contains("gender-checked")) {
+                        z.parentNode.classList.remove("gender-checked")
+                    }
+                });
+                a.target.parentNode.classList.add("gender-checked");
+            })
+        });
+    </script>
+    <script>
+        let inputs2 = document.querySelectorAll(".form-control-active-level input[type=radio]");
+        Array.from(inputs2).forEach(function (elem) {
+
+            elem.addEventListener('change', function (a) {
+
+                Array.from(inputs2).forEach(function (z) {
+                    if (z.parentNode.classList.contains("active-level-checked")) {
+                        z.parentNode.classList.remove("active-level-checked")
+                    }
+                });
+                a.target.parentNode.classList.add("active-level-checked");
+            })
+        });
+    </script>
+{% endblock %}

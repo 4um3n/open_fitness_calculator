@@ -1,0 +1,15 @@
+{% extends "core/navigation_base_paginator.html" %}
+
+{% block paginator-wrapper-class %}
+    diary
+{% endblock %}
+
+{% block current-page-title %}
+    <label for="#" class="nav-nutrient-name">
+        {{ diary.name }}
+    </label>
+    <a href="{% url "profile delete diary" diary.pk %}"
+       class="btn btn-primary reload-nutrition delete">
+        <i class="fa-solid fa-delete-left"></i>
+    </a>
+{% endblock %}

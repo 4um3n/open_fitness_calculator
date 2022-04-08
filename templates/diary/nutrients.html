@@ -1,0 +1,42 @@
+{% extends "core/base_nutrition.html" %}
+{% block nutrition-active %}
+    active
+{% endblock %}
+{% block main-content %}
+
+    <main class="main profile-nutrition">
+        <section class="nutrients-heading">
+            <div class="nutrient-nutrients">
+                <span class="head-data">
+                    Eaten
+                </span>
+                <span class="head-data">
+                    Goal
+                </span>
+                <span class="head-data">
+                    Left
+                </span>
+            </div>
+        </section>
+        <section class="nutrients-wrapper">
+            {% for name, nut in nutrients.items %}
+                <article class="nutrient-wrapper">
+                    <div class="nutrient {{ name }}">
+                        <label for="#" class="nutrient-name">
+                            {{ name }}
+                        </label>
+                        <div class="nutrient-nutrients">
+                            {% for n in nut %}
+                                <span class="data {{ name }}">
+                                    {{ n|floatformat:0 }}{% if name in mg_fields %}mg{% elif name in percents_fields %}%{% else %}g{% endif %}
+                                </span>
+                            {% endfor %}
+                        </div>
+                    </div>
+{#                    <div class="progress-bar {{ name }}"></div>#}
+                </article>
+            {% endfor %}
+        </section>
+    </main>
+
+{% endblock %}

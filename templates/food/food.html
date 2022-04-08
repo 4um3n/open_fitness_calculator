@@ -1,0 +1,106 @@
+{% extends "food/../core/base_food.html" %}
+
+{% block food_name %}
+    {{ food.name }}
+{% endblock %}
+
+{% block ingredients %}
+    {% if food.ingredients %}
+        <section class="description food">
+            <p id="description">{{ food.ingredients }}</p>
+        </section>
+    {% endif %}
+{% endblock %}
+
+{% block pie_chart_url %}
+    {{ food.foodpiechart.image.url }}
+{% endblock %}
+
+{% block protein_percents %}
+    {{ protein_percents }}
+{% endblock %}
+{% block protein_grams %}
+    {{ food.protein }}
+{% endblock %}
+
+{% block carbs_percents %}
+    {{ carbs_percents }}
+{% endblock %}
+{% block carbs_grams %}
+    {{ food.carbs }}
+{% endblock %}
+
+{% block fat_percents %}
+    {{ fat_percents }}
+{% endblock %}
+{% block fat_grams %}
+    {{ food.fat }}
+{% endblock %}
+
+{% block energy %}
+    {{ food.energy }}kcal
+{% endblock %}
+
+{% block carbs %}
+    {{ food.carbs }}g
+{% endblock %}
+
+{% block fiber %}
+    {{ food.fiber }}g
+{% endblock %}
+
+{% block sugars %}
+    {{ food.sugars }}g
+{% endblock %}
+
+{% block protein %}
+    {{ food.protein }}g
+{% endblock %}
+
+{% block calcium %}
+    {{ food.calcium }}%
+{% endblock %}
+
+{% block iron %}
+    {{ food.iron }}%
+{% endblock %}
+
+{% block vitamin_a %}
+    {{ food.vitamin_a }}%
+{% endblock %}
+
+{% block vitamin_c %}
+    {{ food.vitamin_c }}%
+{% endblock %}
+
+{% block fat %}
+    {{ food.fat }}g
+{% endblock %}
+
+{% block saturated_fat %}
+    {{ food.saturated_fat }}g
+{% endblock %}
+
+{% block monounsaturated_fat %}
+    {{ food.monounsaturated_fat }}g
+{% endblock %}
+
+{% block polyunsaturated_fat %}
+    {{ food.polyunsaturated_fat }}g
+{% endblock %}
+
+{% block trans_fat %}
+    {{ food.trans_fat }}g
+{% endblock %}
+
+{% block cholesterol %}
+    {{ food.cholesterol }}mg
+{% endblock %}
+
+{% block sodium %}
+    {{ food.sodium }}mg
+{% endblock %}
+
+{% block potassium %}
+    {{ food.potassium }}mg
+{% endblock %}

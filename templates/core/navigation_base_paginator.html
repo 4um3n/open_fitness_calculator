@@ -1,0 +1,30 @@
+<nav class="paginator-wrapper {% block paginator-wrapper-class %}{% endblock %}">
+    <article class="buttons paginator-nav">
+        {% if page_obj.has_previous %}
+            <a href="?page=1" class="diary-link">
+                <i class="fa-solid fa-angles-left"></i>
+            </a>
+        {% endif %}
+        <a href="?page={% if page_obj.has_previous %}{{ page_obj.previous_page_number }}{% else %}#{% endif %}"
+           class="diary-link">
+            <i class="fa-solid fa-chevron-left"></i>
+        </a>
+    </article>
+
+    <article class="current-page-title">
+        {% block current-page-title %}
+        {% endblock %}
+    </article>
+
+    <article class="buttons paginator-nav right">
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.paginator.num_pages }}" class="diary-link">
+                <i class="fa-solid fa-angles-right"></i>
+            </a>
+        {% endif %}
+        <a href="?page={% if page_obj.has_next %}{{ page_obj.next_page_number }}{% else %}#{% endif %}"
+           class="diary-link">
+            <i class="fa-solid fa-chevron-right"></i>
+        </a>
+    </article>
+</nav>

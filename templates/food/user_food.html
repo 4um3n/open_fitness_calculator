@@ -1,0 +1,39 @@
+{% extends "food/food.html" %}
+
+{% block buttons %}
+    <div class="buttons">
+        {% if food.is_admin %}
+
+            {% if request.user.profile.is_admin %}
+                <a class="btn btn-primary food" href="{% url "update user food" food.pk %}">
+                    UPDATE
+                </a>
+                <a class="btn btn-primary food delete-food food" href="{% url "delete user food" food.pk %}">
+                    DELETE
+                </a>
+            {% endif %}
+
+        {% else %}
+
+            {% if request.user.profile.is_admin or request.user.profile.is_staff %}
+                {% for k, v in form.errors.items %}
+                    {{ v }}
+                {% endfor%}
+                {{ form.is_admin }}
+                {{ form.user }}
+                {{ form.name }}
+                <input type="submit" value="UPLOAD" class="btn btn-primary food">
+            {% endif %}
+
+            <a class="btn btn-primary food" href="{% url "update user food" food.pk %}">
+                UPDATE
+            </a>
+            <a class="btn btn-primary food delete-food food" href="{% url "delete user food" food.pk %}">
+                DELETE
+            </a>
+
+        {% endif %}
+
+
+    </div>
+{% endblock %}

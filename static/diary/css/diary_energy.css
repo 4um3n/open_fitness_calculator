@@ -1,0 +1,129 @@
+@media only screen and (max-width: 900px) {
+    .meal {
+        width: 50% !important;
+        display: flex;
+        flex-direction: column;
+        flex-wrap: nowrap;
+        align-items: center;
+    }
+
+    .meal-wrapper {
+        width: 65% !important;
+    }
+
+    .calories-section {
+        flex-direction: column !important;
+        align-items: center;
+    }
+
+    .calories-data-wrapper {
+        width: 95% !important;
+    }
+
+}
+
+
+@media only screen and (min-device-width: 300px) and (max-device-width: 900px) {
+    .meal {
+        width: 50% !important;
+        display: flex;
+        flex-direction: column;
+        flex-wrap: nowrap;
+        align-items: center;
+    }
+
+    .meal-wrapper {
+        width: 65% !important;
+    }
+
+    .calories-section {
+        flex-direction: column !important;
+        align-items: center;
+    }
+
+    .calories-data-wrapper {
+        width: 90% !important;
+    }
+}
+
+.pie-chart-wrapper {
+    width: fit-content;
+    margin: 0 auto;
+}
+
+.meals-section {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+
+.meal {
+    margin: 10px auto;
+}
+
+.meal-wrapper {
+    font-size: 19px;
+}
+
+.meal-color {
+    width: 10px;
+    height: 10px;
+    background: wheat;
+}
+
+.meal-color.breakfast {
+    background: rgba(1, 114, 80, 1);
+}
+
+.meal-color.lunch {
+    background: rgba(255, 128, 0, 1);
+}
+
+.meal-color.dinner {
+    background: rgba(255, 0, 98, 1);
+}
+
+.meal-color.snacks {
+    background: rgba(0, 67, 120, 1);
+}
+
+.meal-color-wrapper {
+    display: flex;
+    flex-wrap: nowrap;
+}
+
+.meal-name {
+    margin-left: 5px;
+    line-height: 0.5;
+}
+
+.percents_cals_wrapper {
+    display: flex;
+    flex-wrap: nowrap;
+}
+
+.meal-data {
+    margin: 0 2px;
+    white-space: nowrap;
+}
+
+
+.calories-section {
+    font-size: 21px;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-evenly;
+    margin: 21px auto;
+}
+
+.calories-data-wrapper {
+    text-align: center;
+    width: 30%;
+    /*border-top: 2px solid rgba(0, 76, 120, 1);*/
+    border-radius: 10px;
+    box-shadow: 0 3px 7px -3px rgba(0, 0, 0, 1)
+}
+
+.calories {
+    white-space: nowrap;
+}

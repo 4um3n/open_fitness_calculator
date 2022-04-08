@@ -1,0 +1,213 @@
+{% extends "core/base.html" %}
+{% block page-title %}
+    <title>{{ food.name }}</title>
+{% endblock %}
+{% block main-content %}
+    <main class="main food">
+        <form class="food-form" method="post">
+            {% csrf_token %}
+            <section class="heading-wrapper food">
+                <p class="food-name food">
+                    {% block food_name %}
+                    {% endblock %}
+                </p>
+
+                <div class="buttons-wrapper food">
+
+                    {% if form.quantity %}
+                        <section class="quantity-wrapper">
+                            <article class="form-wrapper-food">
+                                {% block form %}
+                                {% endblock %}
+                            </article>
+                        </section>
+                    {% endif %}
+
+                    {% block buttons %}
+                    {% endblock %}
+                </div>
+
+            </section>
+
+            {% block ingredients %}
+            {% endblock %}
+
+
+            {% block diagram %}
+                <section class="calories-wrapper food">
+                    <div class="pie-chart wrapper food">
+                        <img class="chart" src="{% block pie_chart_url %}{% endblock %}" alt="food img">
+                    </div>
+                    <div class="percentages-wrapper food">
+                        <div class="percentages food">
+                            <p class="protein-percents">
+                                {% block protein_percents %}
+                                {% endblock %}%
+                            </p>
+                            <p class="grams">
+                                {% block protein_grams %}
+                                {% endblock %}g
+                            </p>
+                            <p class="text">Protein</p>
+                        </div>
+                        <div class="percentages food">
+                            <p class="carbs-percents">
+                                {% block carbs_percents %}
+                                {% endblock %}%
+                            </p>
+                            <p class="grams">
+                                {% block carbs_grams %}
+                                {% endblock %}g
+                            </p>
+                            <p class="text">Carbs</p>
+                        </div>
+                        <div class="percentages food">
+                            <p class="fat-percents">
+                                {% block fat_percents %}
+                                {% endblock %}%
+                            </p>
+                            <p class="grams">
+                                {% block fat_grams %}
+                                {% endblock %}g
+                            </p>
+                            <p class="text">Fat</p>
+                        </div>
+                    </div>
+                </section>
+            {% endblock %}
+
+            {% block errors %}
+            {% endblock %}
+
+            <h3 class="nutritional-info heading {% block nth_class %}{% endblock %}">Nutritional Info</h3>
+            <section class="nutritional-info wrapper">
+                <section class="nutritional-info left">
+                    <div class="main-macros">
+                        <label class="main-macros" for="calories">Energy</label>
+                        <p class="main-macros" id="calories">
+                            {% block energy %}
+                            {% endblock %}
+                        </p>
+                    </div>
+                    <div class="main-macros">
+                        <label class="main-macros" for="total carbs">Total Carbohydrates</label>
+                        <p class="main-macros" id="total carbs">
+                            {% block carbs %}
+                            {% endblock %}
+                        </p>
+                    </div>
+                    <div class="more-macros">
+                        <label class="more-macros" for="fiber">Fiber</label>
+                        <p class="more-macros" id="fiber">
+                            {% block fiber %}
+                            {% endblock %}
+                        </p>
+                    </div>
+                    <div class="more-macros">
+                        <label class="more-macros" for="sugar">Sugar</label>
+                        <p class="more-macros" id="sugar">
+                            {% block sugars %}
+                            {% endblock %}
+                        </p>
+                    </div>
+
+                    <div class="main-macros">
+                        <label class="main-macros" for="protein">Protein</label>
+                        <p class="main-macros" id="protein">
+                            {% block protein %}
+                            {% endblock %}
+                        </p>
+                    </div>
+                    <div class="more-macros">
+                        <label class="more-macros">Calcium</label>
+                        <p class="more-macros">
+                            {% block calcium %}
+                            {% endblock %}
+                        </p>
+                    </div>
+                    <div class="more-macros">
+                        <label class="more-macros">Iron</label>
+                        <p class="more-macros">
+                            {% block iron %}
+                            {% endblock %}
+                        </p>
+                    </div>
+                    <div class="more-macros">
+                        <label class="more-macros">Vitamin A</label>
+                        <p class="more-macros">
+                            {% block vitamin_a %}
+                            {% endblock %}
+                        </p>
+                    </div>
+                    <div class="more-macros">
+                        <label class="more-macros">Vitamin C</label>
+                        <p class="more-macros">
+                            {% block vitamin_c %}
+                            {% endblock %}
+                        </p>
+                    </div>
+                </section>
+
+                <section class="nutritional-info right">
+
+                    <div class="main-macros">
+                        <label class="main-macros" for="total fat">Total Fat</label>
+                        <p class="main-macros" id="total fat">
+                            {% block fat %}
+                            {% endblock %}
+                        </p>
+                    </div>
+                    <div class="more-macros">
+                        <label class="more-macros" for="saturated fat">Saturated Fat</label>
+                        <p class="more-macros" id="saturated fat">
+                            {% block saturated_fat %}
+                            {% endblock %}
+                        </p>
+                    </div>
+                    <div class="more-macros">
+                        <label class="more-macros" for="poly fat">Polyunsaturated Fat</label>
+                        <p class="more-macros" id="poly fat">
+                            {% block polyunsaturated_fat %}
+                            {% endblock %}
+                        </p>
+                    </div>
+                    <div class="more-macros">
+                        <label class="more-macros" for="mono fat">Monounsaturated Fat</label>
+                        <p class="more-macros" id="mono fat">
+                            {% block monounsaturated_fat %}
+                            {% endblock %}
+                        </p>
+                    </div>
+                    <div class="more-macros">
+                        <label class="more-macros" for="trans fat">Trans Fat</label>
+                        <p class="more-macros" id="trans fat">
+                            {% block trans_fat %}
+                            {% endblock %}
+                        </p>
+                    </div>
+                    <div class="more-macros">
+                        <label class="more-macros" for="cholesterol">Cholesterol</label>
+                        <p class="more-macros" id="cholesterol">
+                            {% block cholesterol %}
+                            {% endblock %}
+                        </p>
+                    </div>
+                    <div class="more-macros">
+                        <label class="more-macros">Sodium</label>
+                        <p class="more-macros">
+                            {% block sodium %}
+                            {% endblock %}
+                        </p>
+                    </div>
+                    <div class="more-macros">
+                        <label class="more-macros">Potassium</label>
+                        <p class="more-macros">
+                            {% block potassium %}
+                            {% endblock %}
+                        </p>
+                    </div>
+                </section>
+            </section>
+        </form>
+    </main>
+{% endblock %}

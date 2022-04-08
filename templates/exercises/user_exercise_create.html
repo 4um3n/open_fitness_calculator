@@ -1,0 +1,27 @@
+{% extends "core/base_exercise.html" %}
+
+{% block exercise_name %}
+    {{ form.name }}
+{% endblock %}
+
+{% block buttons %}
+    <input class="btn btn-primary food" type="submit" value="CREATE  EXERCISE">
+{% endblock %}
+
+{% block errors %}
+    <p>
+        {{ form.errors }}
+    </p>
+{% endblock %}
+
+
+{% block burned_calories %}
+    <section class="quantity-wrapper exercise">
+        <article class="form-wrapper-exercise">
+            {{ form.burned_calories_per_unit }}cals per{{ form.unit }}
+        </article>
+    </section>
+{% endblock %}
+
+{% block unit %}
+{% endblock %}

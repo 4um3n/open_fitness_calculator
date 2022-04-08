@@ -1,0 +1,4 @@
+from open_fitness_calculator.diary import signals
+from open_fitness_calculator.food import signals
+from open_fitness_calculator.fitness_calculator_auth import signals
+from open_fitness_calculator.profiles import signals

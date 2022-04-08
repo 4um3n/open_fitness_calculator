@@ -1,0 +1,48 @@
+.main.list-food {
+    padding: 10px;
+}
+
+.btn.add-food.list-food {
+    display: flex !important;
+    justify-content: space-between;
+    align-items: center;
+    overflow: hidden;
+    border: none;
+    border-bottom: 1px solid rgba(14, 19, 25, 0.5);
+    border-radius: 8px 8px 0 0;
+    text-decoration: none;
+    margin: 2px 0;
+    padding: 5px;
+}
+
+.btn.add-food.list-food:hover,
+.btn.add-food.list-food:focus {
+    border-bottom: 2px solid rgba(0, 76, 120, 1);
+}
+
+.food-name.list-food {
+    white-space: nowrap;
+    overflow: hidden;
+    font-size: 18px;
+    cursor: pointer;
+    color: rgba(14, 19, 25, 1);
+}
+
+.food-macros.list-food {
+    white-space: nowrap;
+    overflow: hidden;
+    display: inline-block;
+    cursor: pointer;
+    font-size: 14px;
+    text-align: center;
+    word-break: break-word;
+    border: 3px solid rgba(106, 26, 33, 1);
+    border-radius: 14px;
+    padding: 0 10px;
+    margin: 0 0 0 10px;
+    vertical-align: bottom;
+    float: right;
+    /*color: rgba(255, 255, 231, 1);*/
+    color: rgba(14, 19, 25, 1);
+}
+

@@ -1,0 +1,52 @@
+.main.home {
+    padding: 10px;
+    min-width: 300px;
+}
+
+.main.home h1 {
+    margin: 0;
+    font-size: 35px;
+}
+
+.calories-wrapper.home {
+    overflow: hidden;
+    font-size: 200%;
+    border-radius: 8px;
+    width: 100%;
+    box-shadow: 0 2px 7px -3px rgba(0, 0, 0, 1);
+    /*background: var(--green-background-gradient);*/
+    padding: 2px;
+}
+
+.calories-content.home {
+    display: flex;
+    justify-content: space-evenly;
+    margin: auto;
+    width: 100%;
+    border-radius: 0 0 6px 6px;
+    background: rgba(255, 255, 255, 1);
+}
+
+.calories-content.home > div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.calories-content.home label {
+    font-size: 40%;
+}
+
+.calories-content.home p {
+    margin: 0 !important;
+}
+
+.paginator-wrapper.home {
+    align-items: flex-start;
+}
+
+.home-page-title {
+    line-height: 1;
+    text-align: center;
+    margin: 0 auto;
+}

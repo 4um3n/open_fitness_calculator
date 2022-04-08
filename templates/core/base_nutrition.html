@@ -1,0 +1,26 @@
+{% extends "core/base.html" %}
+{% block heading %}
+    <heading class="heading profile-nutrition">
+        <nav class="nav profile-nutrition">
+            <ul class="nav-list">
+                <li class="nav-item profile {% block energy-active %}{% endblock %}">
+                    <a href="{% url "profile energy" %}" class="nav-link profile">
+                        <h2 class="nav-item-heading">Energy</h2>
+                    </a>
+                </li>
+                <li class="nav-item profile {% block nutrition-active %}{% endblock %}">
+                    <a href="{% url "profile nutrients" %}" class="nav-link profile">
+                        <h2 class="nav-item-heading">Nutrients</h2>
+                    </a>
+                </li>
+                <li class="nav-item profile {% block macros-active %}{% endblock %}">
+                    <a href="{% url "profile macros" %}" class="nav-link profile">
+                        <h2 class="nav-item-heading">Macros</h2>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        {% include "core/navigation_diary.html" %}
+    </heading>
+{% endblock %}
+

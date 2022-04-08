@@ -1,0 +1,251 @@
+@import "/static/profiles/css/profile.css";
+@import "/static/profiles/css/staff.css";
+@import "/static/diary/css/diary_energy.css";
+@import "/static/diary/css/diary_nutrients.css";
+@import "/static/diary/css/diary_macros.css";
+@import "/static/food/css/food.css";
+@import "/static/food/css/create-food.css";
+@import "/static/food/css/search-food-repo.css";
+@import "/static/food/css/list_available_food.css";
+@import "/static/exercises/css/exercises.css";
+@import "/static/exercises/css/create-exercise.css";
+@import "/static/fitness_calculator_auth/css/auth_styles.css";
+@import "/static/fitness_calculator_auth/css/user_styles.css";
+@import "/static/core/css/home.css";
+@import "/static/diary/css/diary.css";
+@import "/static/core/css/auth_navigation.css";
+@import "/static/core/css/diary_navigation.css";
+
+
+:root {
+    --blue-background-gradient: linear-gradient(
+            90deg,
+            rgba(0,49,77,1) 0%,
+            rgba(0,52,82,1) 25%,
+            rgba(0,64,101,1) 50%,
+            rgba(0,71,112,1) 75%,
+            rgba(0,76,120,1) 100%
+    );
+    --blue-background-gradient-reversed: linear-gradient(
+            90deg,
+            rgba(0,76,120,1) 0%,
+            rgba(0,71,112,1) 25%,
+            rgba(0,64,101,1) 50%,
+            rgba(0,52,82,1) 75%,
+            rgba(0,49,77,1) 100%
+    );
+}
+
+
+@font-face {
+    font-family: Sony;
+    src: url("/static/fonts/Sony_Sketch_EF.ttf");
+}
+
+body {
+    margin: 0;
+    font-family: Sony, sans-serif;
+    min-width: 300px;
+}
+
+.bg-white, .sidebar-heading, .list-group-item, .navbar, .d-flex {
+    background: #FFFFFF !important;
+    color: inherit !important;
+}
+
+.list-group-item.p-3:hover {
+    background: rgb(0, 76, 120) !important;
+    color: rgba(255, 255, 255, 1) !important;
+}
+
+.border-end {
+    border-right: 1px solid rgba(14, 19, 25, 0.25) !important;
+}
+
+div.sidebar-heading.border-bottom.bg-light {
+    display: inline-block;
+    padding: 5px !important;
+    width: 100%;
+    border-bottom: 1px solid rgba(14, 19, 25, 0.25) !important;
+}
+
+nav.navbar {
+    border-bottom: 1px solid rgba(14, 19, 25, 0.25) !important;
+}
+
+.list-group-item {
+    border-bottom: 1px solid rgba(14, 19, 25, 0.25);
+}
+
+.list-group-item:hover {
+    background: #FFFFFF !important;
+    color: inherit !important;
+}
+
+a.nav-link {
+    color: inherit !important;
+}
+
+div.dropdown-menu.dropdown-menu-end.show {
+    padding: 10px 5px;
+    border: 1px solid rgba(54, 50, 65, 0.25);
+    background: #FFFFFF !important;
+}
+
+a.dropdown-item {
+    border-radius: 4px;
+    color: inherit;
+}
+
+a.dropdown-item:hover {
+    background: rgba(0, 76, 120, 1) !important;
+    color: rgba(255, 255, 255, 1) !important;
+}
+
+
+.profile-picture-wrapper.base {
+    display: inline-block;
+    margin: 0 auto;
+}
+.profile-picture-wrapper.base:hover {
+    cursor: pointer;
+}
+
+.profile-picture-wrapper.base img {
+    width: 60px !important;
+    height: 60px !important;
+}
+
+.username {
+    color: rgba(29, 40, 52);
+    text-decoration: none;
+    padding: 0 11px;
+}
+.username:hover {
+    color: rgba(29, 40, 52);
+}
+.username > p {
+    font-size: 21px;
+    margin: 5px 0 0 0;
+}
+
+
+.form-control:disabled {
+    background: transparent !important;
+    color: rgba(255, 255, 255, 1) !important;
+}
+
+.transparent {
+    background: transparent !important;
+}
+
+.transparent:hover {
+    background: transparent !important;
+    color: initial !important;
+}
+
+.delete {
+    background: rgba(106, 26, 33, 1) !important;
+    color: rgba(255, 255, 255, 1) !important;
+}
+
+.delete:hover {
+    background: rgb(155, 38, 49) !important;
+}
+
+
+/* Buttons */
+.btn-primary {
+    font-family: Sony, sans-serif;
+    display: inline-block;
+    text-align: center;
+    text-decoration: none;
+    border: none;
+    border-radius: 4px;
+    color: rgba(231, 231, 231, 1);
+    background: rgba(0, 76, 120, 1);
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+    outline: none;
+    box-shadow: none;
+    color: rgba(231, 231, 231, 1);
+    background: rgb(0, 95, 148)
+}
+
+.btn-primary.profile {
+    font-size: 16px;
+    margin: 10px 0;
+    padding: 5px 21px;
+    background: var(--blue-background-gradient)
+}
+
+.btn-primary.profile:hover {
+    background: var(--blue-background-gradient-reversed)
+}
+
+.btn-primary.food,
+.btn-primary.create-food {
+    margin: 5px 0;
+    padding: 3px 10px;
+}
+
+.btn-primary.auth {
+    margin: 10px 0;
+    font-size: 21px;
+    padding: 10px 0;
+}
+
+
+.btn.delete-food {
+    font-size: 14px;
+    text-decoration: none;
+    border-radius: 4px;
+    margin: 5px 0;
+    padding: 3px 10px;
+    background: rgba(106, 26, 33, 1);
+    color: rgba(231, 231, 231, 1);
+}
+
+.btn.delete-food:hover {
+    background: rgb(155, 38, 49);
+    color: rgba(231, 231, 231, 1);
+}
+
+.errorlist.nonfield {
+    display: block !important;
+    margin: 0 10px 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+
+/*  Scrollbar  */
+/* width and height */
+::-webkit-scrollbar {
+    height: 2px;
+    width: 2px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    /*background: rgba(255, 255, 255, 1);*/
+    border-radius: 5px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 1);
+    border-radius: 5px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(190, 190, 190, 1);
+}
+
+/*  Bottom corner  */
+::-webkit-scrollbar-corner {
+    background: rgba(0, 0, 0, 1);
+}

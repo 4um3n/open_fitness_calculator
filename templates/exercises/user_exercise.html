@@ -1,0 +1,49 @@
+{% extends "core/base_exercise.html" %}
+
+{% block exercise_name %}
+    {{ exercise.name }}
+{% endblock %}
+
+{% block buttons %}
+    <div class="buttons">
+        {% if exercise.is_admin %}
+
+            {% if request.user.profile.is_admin %}
+                <a class="btn btn-primary food" href="{% url "update user exercise" exercise.pk %}">
+                    UPDATE
+                </a>
+                <a class="btn btn-primary food delete-food food" href="{% url "delete user exercise" exercise.pk %}">
+                    DELETE
+                </a>
+            {% endif %}
+
+        {% else %}
+
+            {% if request.user.profile.is_admin or request.user.profile.is_staff %}
+                {% for k, v in form.errors.items %}
+                    {{ v }}
+                {% endfor %}
+                {{ form.is_admin }}
+                {{ form.user }}
+                {{ form.name }}
+                <input type="submit" value="UPLOAD" class="btn btn-primary food">
+            {% endif %}
+
+            <a class="btn btn-primary food" href="{% url "update user exercise" exercise.pk %}">
+                UPDATE
+            </a>
+            <a class="btn btn-primary food delete-food food" href="{% url "delete user exercise" exercise.pk %}">
+                DELETE
+            </a>
+
+        {% endif %}
+
+
+    </div>
+{% endblock %}
+
+{% block burned_calories %}
+    <h2>
+        {{ exercise.burned_calories_per_unit }} cals burned per {{ exercise.unit }}
+    </h2>
+{% endblock %}

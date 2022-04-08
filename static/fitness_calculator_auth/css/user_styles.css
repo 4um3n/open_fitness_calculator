@@ -1,0 +1,57 @@
+@media only screen and (min-device-width: 300px) and (max-device-width: 900px) {
+    .old-password-form {
+        width: 300px !important;
+        height: 200px !important;
+    }
+
+    .old-password-form > p {
+        font-size: 21px !important;
+    }
+
+    .form-control.user {
+        font-size: 21px !important;
+    }
+
+    .btn.btn-primary.user {
+        font-size: 18px !important;
+    }
+}
+
+.old-password-form {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: center;
+    width: 400px;
+    height: 300px;
+    margin: 100px auto;
+    border-radius: 8px;
+    box-shadow: 0 2px 7px -3px rgba(0, 0, 0, 1);
+}
+
+.old-password-form > p {
+    font-size: 25px;
+    margin: 0;
+}
+
+.form-control.user {
+    width: 90%;
+    margin: 5px auto;
+    font-size: 25px;
+    border: none;
+    box-shadow: 0 2px 7px -3px rgba(0, 0, 0, 1);
+}
+
+.form-control.user:focus {
+    outline: none !important;
+    border: none;
+    box-shadow: 0 3px 7px -3px rgba(0, 0, 0, 1);
+}
+
+.btn.btn-primary.user {
+    width: 90%;
+    margin: 5px auto;
+    font-size: 21px;
+    text-transform: uppercase;
+}

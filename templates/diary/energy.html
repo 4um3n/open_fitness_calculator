@@ -1,0 +1,121 @@
+{% extends "core/base_nutrition.html" %}
+{% block energy-active %}
+    active
+{% endblock %}
+{% block main-content %}
+    <main class="main profile-nutrition">
+        <section class="pie-chart-section">
+            <div class="pie-chart-wrapper">
+                <img class="pie-chart" src="{{ diary.caloriespiechart.image.url }}" alt="pie-chart">
+            </div>
+        </section>
+
+        <section class="meals-section">
+            <section class="meal">
+                <article class="meal-wrapper">
+                    <div class="meal-color-wrapper">
+                        <div class="meal-color breakfast"></div>
+                        <label for="#" class="meal-name">
+                            Breakfast
+                        </label>
+                    </div>
+                    <div class="percents_cals_wrapper">
+                        <p class="meal-data">
+                            {{ breakfast_percents|floatformat:2 }}%
+                        </p>
+                        <p class="meal-data">
+                            ({{ breakfast_cals }}cal)
+                        </p>
+                    </div>
+                </article>
+            </section>
+            <section class="meal">
+                <article class="meal-wrapper">
+                    <div class="meal-color-wrapper">
+                        <div class="meal-color lunch"></div>
+                        <label for="#" class="meal-name">
+                            Lunch
+                        </label>
+                    </div>
+                    <div class="percents_cals_wrapper">
+                        <p class="meal-data">
+                            {{ lunch_percents|floatformat:2 }}%
+                        </p>
+                        <p class="meal-data">
+                            ({{ lunch_cals }}cal)
+                        </p>
+                    </div>
+                </article>
+            </section>
+            <section class="meal">
+                <article class="meal-wrapper">
+                    <div class="meal-color-wrapper">
+                        <div class="meal-color dinner"></div>
+                        <label for="#" class="meal-name">
+                            Dinner
+                        </label>
+                    </div>
+                    <div class="percents_cals_wrapper">
+                        <p class="meal-data">
+                            {{ dinner_percents|floatformat:2 }}%
+                        </p>
+                        <p class="meal-data">
+                            ({{ dinner_cals }}cal)
+                        </p>
+                    </div>
+                </article>
+            </section>
+            <section class="meal">
+                <article class="meal-wrapper">
+                    <div class="meal-color-wrapper">
+                        <div class="meal-color snacks"></div>
+                        <label for="#" class="meal-name">
+                            Snacks
+                        </label>
+                    </div>
+                    <div class="percents_cals_wrapper">
+                        <p class="meal-data">
+                            {{ snacks_percents|floatformat:2 }}%
+                        </p>
+                        <p class="meal-data">
+                            ({{ snacks_cals }}cal)
+                        </p>
+                    </div>
+                </article>
+            </section>
+        </section>
+
+        <section class="calories-section">
+            <article class="calories-data-wrapper">
+                <div class="calories">
+                    <label for="#" class="calories-type">
+                        Total
+                    </label>
+                    <span class="calories-data">
+                    {{ eaten_cals|floatformat:0 }}
+                </span>
+                </div>
+            </article>
+            <article class="calories-data-wrapper">
+                <div class="calories">
+                    <label for="#" class="calories-type">
+                        Goal
+                    </label>
+                    <span class="calories-data">
+                    {{ goal_cals|floatformat:0 }}
+                </span>
+                </div>
+            </article>
+            <article class="calories-data-wrapper">
+                <div class="calories">
+                    <label for="#" class="calories-type">
+                        Remaining
+                    </label>
+                    <span class="calories-data">
+                    {{ remaining_cals|floatformat:0 }}
+                </span>
+                </div>
+            </article>
+        </section>
+    </main>
+{% endblock %}

@@ -1,0 +1,192 @@
+@media only screen and (min-device-width: 300px) and (max-device-width: 800px) {
+    .main.profile {
+        min-width: 100% !important;
+    }
+
+    .profile-picture-wrapper img {
+        width: 121px !important;
+        height: 121px !important;
+    }
+
+    .form-control-wrapper.profile.activity-level,
+    .form-control-wrapper.profile.per-week,
+    .form-control-wrapper.profile.goal {
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .form-control-radio.active-level,
+    .form-control-radio.goal {
+        width: 100%;
+    }
+
+    .form-control-radio.active-level div {
+        width: 25%;
+    }
+
+    .form-control-radio.goal div {
+        width: 33.3%;
+    }
+
+    .form-control-radio.active-level label,
+    .form-control-radio.goal label {
+        width: 100%;
+    }
+
+
+    .greeting.profile h1 {
+        font-size: 25px !important;
+    }
+
+}
+
+.main.profile {
+    min-width: 450px;
+}
+
+.user-profile-heading {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: center;
+    box-sizing: border-box;
+    text-align: center;
+    margin: 0;
+    padding: 10px;
+    border: 2px solid rgba(0, 76, 120, 1);
+    border-top: none;
+    border-radius: 0 0 10px 10px;
+}
+
+.profile-picture-wrapper {
+    box-sizing: border-box;
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    box-shadow: 0 2px 7px -3px  rgba(0, 0, 0, 1);
+    /*background: var(--green-background-gradient);*/
+    margin: 10px auto;
+    padding: 3px;
+    border-radius: 200px;
+    width: fit-content;
+    max-width: 100%;
+}
+
+.profile-picture-wrapper img {
+    border-radius: inherit;
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+}
+
+.profile-picture-wrapper img:hover {
+    cursor: pointer;
+}
+
+
+.greeting.profile {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    margin: 0 21px;
+    /*color: rgba(255, 255, 255, 1);*/
+}
+
+.greeting.profile h1 {
+    max-width: 100%;
+    font-size: 30px;
+    margin: 0;
+    line-height: 0.8;
+}
+
+
+.profile-form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    min-width: 320px;
+    margin: 0 auto;
+    padding: 0 14px;
+}
+
+.form-control-wrapper.profile {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.5);
+}
+
+.form-control-wrapper.profile.per-week {
+    justify-content: center;
+}
+
+.form-control-wrapper.profile > label {
+    text-transform: uppercase;
+    font-size: 18px;
+    white-space: nowrap;
+    margin-right: 10px;
+}
+
+.form-control.profile {
+    font-size: 18px;
+    width: fit-content;
+    color: rgba(54, 50, 65, 1);
+    font-family: Sony, sans-serif;
+    border: none;
+    text-align: right;
+    border-radius: 4px;
+    padding: 10px 0;
+}
+
+.form-control.profile:focus {
+    box-shadow: none;
+}
+
+.form-control-profile-picture {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-control-radio {
+    padding: 10px 0;
+    display: inline-flex;
+    justify-content: space-between;
+}
+
+div.form-control-radio.per-week {
+    width: 100%;
+}
+
+.form-control-radio.per-week div {
+    width: 20%;
+}
+
+.form-control-radio.per-week label {
+    width: 100%;
+}
+
+.form-control-radio label {
+    font-size: 18px;
+    display: inline-block;
+    text-align: center;
+    border: none;
+    min-width: 70px;
+}
+
+.form-control-radio label:hover {
+    background: var(--blue-background-gradient-reversed);
+    color: white;
+}
+
+.form-control-radio label input[type="radio"] {
+    opacity: 0;
+    position: fixed;
+}
+
+label.radio-checked {
+    background: var(--blue-background-gradient);
+    color: white;
+}

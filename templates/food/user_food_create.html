@@ -1,0 +1,99 @@
+{% extends "food/../core/base_food.html" %}
+
+{% block nth_class %}
+    create-food
+{% endblock %}
+
+{% block food_name %}
+    {{ form.name }}
+{% endblock %}
+
+{% block buttons %}
+    <input class="btn btn-primary food" type="submit" value="CREATE  FOOD">
+{% endblock %}
+
+{% block ingredients %}
+    <section class="description food">
+        <p id="description">
+            {{ form.ingredients }}
+        </p>
+    </section>
+{% endblock %}
+
+{% block diagram %}
+{% endblock %}
+
+{% block errors %}
+    <p>
+        {{ form.errors }}
+    </p>
+{% endblock %}
+
+
+{% block energy %}
+    {{ form.energy }}
+{% endblock %}
+
+{% block carbs %}
+    {{ form.carbs }}
+{% endblock %}
+
+{% block fiber %}
+    {{ form.fiber }}
+{% endblock %}
+
+{% block sugars %}
+    {{ form.sugars }}
+{% endblock %}
+
+{% block protein %}
+    {{ form.protein }}
+{% endblock %}
+
+{% block calcium %}
+    {{ form.calcium }}
+{% endblock %}
+
+{% block iron %}
+    {{ form.iron }}
+{% endblock %}
+
+{% block vitamin_a %}
+    {{ form.vitamin_a }}
+{% endblock %}
+
+{% block vitamin_c %}
+    {{ form.vitamin_c }}
+{% endblock %}
+
+{% block fat %}
+    {{ form.fat }}
+{% endblock %}
+
+{% block saturated_fat %}
+    {{ form.saturated_fat }}
+{% endblock %}
+
+{% block monounsaturated_fat %}
+    {{ form.monounsaturated_fat }}
+{% endblock %}
+
+{% block polyunsaturated_fat %}
+    {{ form.polyunsaturated_fat }}
+{% endblock %}
+
+{% block trans_fat %}
+    {{ form.trans_fat }}
+{% endblock %}
+
+{% block cholesterol %}
+    {{ form.cholesterol }}
+{% endblock %}
+
+{% block sodium %}
+    {{ form.sodium }}
+{% endblock %}
+
+{% block potassium %}
+    {{ form.potassium }}
+{% endblock %}

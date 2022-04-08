@@ -1,0 +1,27 @@
+{% extends "core/base.html" %}
+{% block page-title %}
+    <title>Food</title>
+{% endblock %}
+{% block main-content %}
+    <main class="main list-food">
+
+        {% include "core/search_bar.html" %}
+
+        <a class="btn btn-primary create-food" href="{% url "create user food" %}">CREATE FOOD</a>
+
+        {% for current_food in food %}
+            <a class="btn add-food list-food" href="{% url "user food" current_food.pk %}">
+                <label class="food-name list-food">
+                    {{ current_food.name }}
+                </label>
+                <label class="food-macros list-food">
+                    Cal {{ current_food.energy }}cal /
+                    P {{ current_food.protein }}g /
+                    C {{ current_food.carbs }}g /
+                    F {{ current_food.fat }}g
+                </label>
+            </a>
+        {% endfor %}
+
+    </main>
+{% endblock %}

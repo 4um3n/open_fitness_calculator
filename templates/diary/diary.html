@@ -1,0 +1,61 @@
+{% extends "core/base.html" %}
+
+{% block page-title %}
+    <title>Diary</title>
+{% endblock %}
+{% block main-content %}
+    <heading class="heading diary">
+        {% include "core/navigation_diary.html" %}
+    </heading>
+    <main class="main diary">
+        {% for meal_name, meals in meals_mapper.items %}
+            <section class="meal-section diary">
+                <h2>{{ meal_name }}</h2>
+
+                {% for meal in meals %}
+                    <button onclick="location.href='{% url "meal food" diary.pk meal.pk %}'"
+                            class="btn added-food diary">
+                        <label class="food-name diary">
+                            {{ meal.food.name }}
+                        </label>
+                        <a class="btn delete-food diary" href="{% url "delete food from diary" diary.pk meal.pk %}">
+                            DELETE
+                        </a>
+                    </button>
+                {% endfor %}
+
+                <a class="btn btn-primary diary" href="{% url "list available food" diary.pk meal_name %}">ADD FOOD</a>
+            </section>
+        {% endfor %}
+
+        <section class="meal-section diary">
+            <h2>Exercise</h2>
+
+            {% for diary_exercise in exercises %}
+                <button onclick="location.href='{% url "diary exercise" diary.pk diary_exercise.pk %}'"
+                        class="btn added-food diary">
+                    <label class="food-name diary">
+                        {{ diary_exercise.exercise.name }}
+                    </label>
+                    <a class="btn delete-food diary" href="{% url "delete exercise from diary" diary.pk diary_exercise.pk %}">
+                        DELETE
+                    </a>
+                </button>
+            {% endfor %}
+
+            <a class="btn btn-primary diary" href="{% url "list available exercises" diary.pk %}">ADD EXERCISE</a>
+        </section>
+{#        <section class="meal-section diary">#}
+{#            <h2>Water</h2>#}
+{#            <a class="btn btn-primary diary" href="#">ADD WATER</a>#}
+{#        </section>#}
+        <form class="diary-form" method="post">
+            {% csrf_token %}
+            {{ form.is_completed }}
+            {{ form.end_date }}
+            {{ form.name }}
+            {{ form.name.errors }}
+            <input class="btn btn-primary diary" type="submit" value="{{ post_button_value }}">
+        </form>
+    </main>
+{% endblock %}

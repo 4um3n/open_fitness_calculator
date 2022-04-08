@@ -1,0 +1,81 @@
+@media only screen and (min-device-width: 300px) and (max-device-width: 1000px) {
+    .top-nav.primary .logo {
+        font-size: 40px !important;
+    }
+
+    .top-nav.primary .auth-buttons {
+        width: 305px !important;
+    }
+
+    .top-nav.primary .auth-buttons > a {
+        font-size: 35px !important;
+    }
+
+    .top-nav.primary .auth-buttons i {
+        font-size: 28px !important;
+    }
+}
+
+.top-nav.primary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 90%;
+    box-sizing: border-box;
+    margin: 10px auto;
+    padding: 10px 25px;
+    border: none;
+    border-radius: 40px;
+    box-shadow: 0 2px 10px -7px;
+    min-width: 650px;
+    background: rgba(255, 255, 255, 1);
+}
+
+.top-nav.primary .logo {
+    color: rgba(0, 76, 120, 1);
+    text-decoration: none;
+    font-size: 21px;
+}
+
+.top-nav.primary .logo i {
+    color: rgba(0, 76, 120, 1);
+
+}
+
+.top-nav.primary .auth-buttons-wrapper {
+
+}
+
+.top-nav.primary .auth-buttons {
+    display: flex;
+    justify-content: space-between;
+    width: 185px;
+}
+
+.top-nav.primary .auth-buttons > a {
+    font-size: 21px;
+    text-decoration: none;
+    color: rgba(0, 76, 120, 0.5);
+    white-space: nowrap;
+}
+
+.top-nav.primary .auth-buttons > a:hover {
+    background: rgba(0, 76, 120, 1);
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    -moz-text-fill-color: transparent;
+}
+
+.top-nav.primary .auth-buttons > a i {
+    font-size: 16px;
+    margin-right: 2px;
+}
+
+.top-nav.primary .auth-buttons .left {
+    position: relative;
+}
+
+.top-nav.primary .auth-buttons.out {
+    justify-content: flex-end;
+}

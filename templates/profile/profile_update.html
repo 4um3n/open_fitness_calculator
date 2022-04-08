@@ -1,0 +1,80 @@
+{% extends "core/base.html" %}
+{% block title %}
+    <title>Profile details</title>
+{% endblock %}
+{% block body-attrs %}
+    onload=profileRadioButtonsClassController()
+{% endblock %}
+{% block main-content %}
+    <main class="main profile">
+        <form method="post" enctype="multipart/form-data" class="profile-form">
+            {% csrf_token %}
+
+            {{ goals_form.errors }}
+            {% block profile_heading %}
+                <div class="profile-picture-wrapper">
+                    <img onclick="getProfilePicture()" id="profile_image" src="{{ profile.profile_picture.url }}"
+                         alt="profile">
+                    <div class="greeting profile">
+                        <a class="btn btn-primary food" href="{% url "confirm old password" %}">
+                            CREDENTIALS
+                        </a>
+                        <a class="btn delete-food food" href="{% url "user delete" %}">
+                            DELETE
+                        </a>
+                    </div>
+                    {{ form.profile_picture }}
+                </div>
+            {% endblock %}
+
+            <div class="form-control-wrapper profile">
+                <label for="#">First name</label>
+                {{ form.first_name }}
+                {{ form.first_name.errors }}
+            </div>
+            <div class="form-control-wrapper profile">
+                <label for="#">Last name</label>
+                {{ form.last_name }}
+                {{ form.last_name.errors }}
+            </div>
+            <div class="form-control-wrapper profile">
+                <label for="#">Age</label>
+                {{ form.age }}
+                {{ form.age.errors }}
+            </div>
+            <div class="form-control-wrapper profile">
+                <label for="#">Weight</label>
+                {{ form.weight }}
+                {{ form.weight.errors }}
+            </div>
+            <div class="form-control-wrapper profile">
+                <label for="#">Height</label>
+                {{ form.height }}
+                {{ form.height.errors }}
+            </div>
+            <div class="form-control-wrapper profile">
+                <label for="#">Gender</label>
+                {{ form.gender }}
+            </div>
+            <div class="form-control-wrapper profile goal">
+                <label for="#">Goal</label>
+                {{ goals_form.goal }}
+            </div>
+            <div class="form-control-wrapper profile activity-level">
+                <label for="#">Activity Level</label>
+                {{ goals_form.activity_level }}
+            </div>
+            <div class="form-control-wrapper profile per-week">
+                <label for="#">Per Week</label>
+                {{ goals_form.per_week }}
+            </div>
+
+            {% block submit_button %}
+                <input type="submit" class="btn btn-primary profile" value="UPDATE">
+            {% endblock %}
+        </form>
+
+    </main>
+
+    <script src="/static/profiles/js/profile.js"></script>
+{% endblock %}

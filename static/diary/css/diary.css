@@ -1,0 +1,71 @@
+.main.diary {
+    padding: 0 10px;
+}
+
+.meal-section.diary {
+    font-size: 18px;
+    margin: 0 0 40px 0;
+    color: inherit;
+    border-radius: 4px;
+    padding: 0;
+}
+
+.meal-section.diary h2 {
+    font-size: 40px;
+}
+
+/*Added Food button*/
+.btn.added-food.diary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-width: 300px;
+    width: 100%;
+    overflow: hidden;
+    border: none;
+    border-radius: 8px 8px 0 0;
+    margin: 10px 0;
+    padding: 0 !important;
+    background: transparent;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.5);
+}
+
+.btn.added-food.diary:hover {
+    border-bottom: 2px solid rgba(0, 76, 120, 1);
+}
+
+
+/*Labels inside Added Food button*/
+.food-name.diary {
+    white-space: nowrap;
+    font-size: 21px;
+    color: rgba(14, 19, 25, 1);
+    cursor: pointer;
+    overflow: hidden;
+    margin-right: 10px;
+}
+
+.diary-form {
+    display: flex;
+    flex-wrap: nowrap;
+    margin: 21px auto;
+}
+
+.form-control.diary {
+    outline: none;
+    border: none;
+    border-bottom: 2px solid rgba(0, 76, 120, 1);
+    border-radius: initial;
+}
+.form-control.diary:focus {
+    box-shadow: none;
+}
+
+.btn.btn-primary.diary {
+    border-bottom-left-radius: initial;
+    border-bottom-right-radius: initial;
+}
+
+
+
+

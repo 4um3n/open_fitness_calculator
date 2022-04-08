@@ -1,0 +1,11 @@
+{% extends "core/navigation_base_paginator.html" %}
+
+{% block paginator-wrapper-class %}
+    home
+{% endblock %}
+
+{% block current-page-title %}
+    <h3 class="home-page-title">
+        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+    </h3>
+{% endblock %}
