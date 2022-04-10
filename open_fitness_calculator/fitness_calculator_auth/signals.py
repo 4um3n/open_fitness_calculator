@@ -12,14 +12,13 @@ def create_profile(sender, instance, *args, **kwargs):
     if not Profile.objects.filter(user=instance).exists():
         kwargs = {"user": instance}
 
-        if instance.is_superuser:
+        if instance.is_staff:
             kwargs.update({
-                "is_admin": True,
                 "is_staff": True,
             })
-        elif instance.is_staff:
+        elif instance.is_superuser:
             kwargs.update({
-                "is_staff": True,
+                "is_admin": True,
             })
 
         Profile.objects.create(**kwargs).save()

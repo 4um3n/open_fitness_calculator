@@ -13,10 +13,10 @@ class ProfileUpdateView(UpdateView):
     model = Profile
     template_name = "profile/profile_update.html"
     success_url = reverse_lazy("profile details")
+    object = None
 
     def get_object(self, queryset=None):
-        self.kwargs["pk"] = self.request.user.pk
-        return super(ProfileUpdateView, self).get_object()
+        return self.request.user.profile
 
     def get_context_data(self, **kwargs):
         profile = self.get_object()
@@ -50,7 +50,11 @@ class StaffView(FormView):
     success_url = reverse_lazy("staff", kwargs={"profile_pk": 0})
 
     def get_object(self):
-        return get_object_or_404(self.model, pk=self.kwargs.get(self.pk_url_kwarg))
+        return get_object_or_404(
+            self.model,
+            pk=self.kwargs.get(self.pk_url_kwarg),
+            requested_staff=True
+        )
 
     def get_context_data(self, **kwargs):
         profile_pk = self.request.user.profile.pk

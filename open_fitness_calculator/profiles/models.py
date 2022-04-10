@@ -89,7 +89,7 @@ class MacrosPercents(models.Model):
         verbose_name_plural = "Macros Percents"
 
     profile = models.OneToOneField(
-        Profile,
+        to=Profile,
         on_delete=models.CASCADE,
         primary_key=True
     )
@@ -150,7 +150,7 @@ class Goal(models.Model):
     )
 
     profile = models.OneToOneField(
-        Profile,
+        to=Profile,
         on_delete=models.CASCADE,
         primary_key=True
     )
@@ -184,7 +184,7 @@ class DailyNutrients(models.Model, DailyCaloriesCalculatorMixin):
         verbose_name_plural = "Daily nutrients"
 
     profile = models.OneToOneField(
-        Profile,
+        to=Profile,
         on_delete=models.CASCADE,
         primary_key=True
     )

@@ -41,7 +41,6 @@ class HomeView(ListView, FormView, SearchOpenFoodMixin):
 
         self.extra_context = {
             'page_obj': page,
-            'paginator': paginator,
             "food": page.object_list,
             "user": self.request.user,
             "calories": int(diary.calories),
@@ -49,6 +48,7 @@ class HomeView(ListView, FormView, SearchOpenFoodMixin):
             "exercises_calories": int(diary.exercises_calories),
             "remaining_calories": int(diary.remaining_calories),
         }
+
         return super(HomeView, self).get_context_data(**kwargs)
 
     def form_valid(self, form):

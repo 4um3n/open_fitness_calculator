@@ -21,7 +21,6 @@ class SignUpView(CreateView):
 
     def form_valid(self, form):
         user = form.save()
-        Profile(user=user).save()
         login(self.request, user)
         return redirect(self.success_url)
 
@@ -50,7 +49,6 @@ class SignOutView(RedirectView):
 class RequirePasswordView(FormView):
     form_class = RequirePasswordForm
     template_name = "fitness_calculator_auth/require_password.html"
-    next_url = None
 
     def get_form_kwargs(self):
         kwargs = super(RequirePasswordView, self).get_form_kwargs()
