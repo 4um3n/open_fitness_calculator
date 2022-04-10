@@ -1,12 +1,11 @@
-import json
-
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.views.generic import FormView, ListView
+
 from rest_framework import status
-from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.response import Response
 
 from open_fitness_calculator.food.forms import SearchFoodForm
 from open_fitness_calculator.core.mixins import SearchOpenFoodMixin
@@ -35,21 +34,20 @@ class HomeView(ListView, FormView, SearchOpenFoodMixin):
             return []
 
     def get_context_data(self, **kwargs):
-        diary = self.request.user.profile.diary_set.get(is_completed=False)
         food = self.get_queryset()
         self.request.session["last_food"] = food
-
+        diary = self.request.user.profile.diary_set.get(is_completed=False)
         paginator, page, queryset, is_paginated = self.paginate_queryset(food, self.paginate_by)
 
         self.extra_context = {
+            'page_obj': page,
+            'paginator': paginator,
+            "food": page.object_list,
             "user": self.request.user,
             "calories": int(diary.calories),
             "eaten_calories": int(diary.eaten_calories),
             "exercises_calories": int(diary.exercises_calories),
             "remaining_calories": int(diary.remaining_calories),
-            "food": page.object_list,
-            'paginator': paginator,
-            'page_obj': page,
         }
         return super(HomeView, self).get_context_data(**kwargs)
 

@@ -1,26 +1,23 @@
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
-from django.shortcuts import redirect
-from django.contrib.auth import login, logout
+from django.shortcuts import redirect, get_object_or_404
+from django.contrib.auth import login, logout, REDIRECT_FIELD_NAME
 from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, FormView, RedirectView, UpdateView, DeleteView
-from open_fitness_calculator.fitness_calculator_auth.forms import SignUpForm, SignInForm, UpdateUserCredentialsForm, \
-    UpdateUserPasswordForm, OldPasswordForm
-from open_fitness_calculator.fitness_calculator_auth.models import FitnessCalculatorUser
-from open_fitness_calculator.profiles.forms import ProfileForm, GoalForm
+
+from open_fitness_calculator.core.decorators import password_required, unauthenticated_required
 from open_fitness_calculator.profiles.models import Profile
+from open_fitness_calculator.profiles.forms import ProfileForm, GoalForm
+from open_fitness_calculator.fitness_calculator_auth.models import FitnessCalculatorUser
+from open_fitness_calculator.fitness_calculator_auth.forms import SignUpForm, SignInForm, \
+    UpdateUserCredentialsForm, UpdateUserPasswordForm, RequirePasswordForm
 
 
+@method_decorator(unauthenticated_required, name="dispatch")
 class SignUpView(CreateView):
     form_class = SignUpForm
     success_url = reverse_lazy("profile details")
     template_name = "fitness_calculator_auth/sign_up.html"
-
-    def get(self, request, *args, **kwargs):
-        if request.user.is_authenticated:
-            return redirect("home")
-
-        return super(SignUpView, self).get(request, *args, **kwargs)
 
     def form_valid(self, form):
         user = form.save()
@@ -29,16 +26,11 @@ class SignUpView(CreateView):
         return redirect(self.success_url)
 
 
+@method_decorator(unauthenticated_required, name="dispatch")
 class SignInView(FormView):
     form_class = SignInForm
     success_url = reverse_lazy("home")
     template_name = "fitness_calculator_auth/sign_in.html"
-
-    def get(self, request, *args, **kwargs):
-        if request.user.is_authenticated:
-            return redirect("home")
-
-        return super(SignInView, self).get(request, *args, **kwargs)
 
     def form_valid(self, form):
         user = form.save()
@@ -55,18 +47,24 @@ class SignOutView(RedirectView):
 
 
 @method_decorator(login_required, name="dispatch")
-class OldPasswordView(FormView):
-    form_class = OldPasswordForm
-    success_url = reverse_lazy("update user credentials")
-    template_name = "fitness_calculator_auth/old_password.html"
+class RequirePasswordView(FormView):
+    form_class = RequirePasswordForm
+    template_name = "fitness_calculator_auth/require_password.html"
+    next_url = None
 
     def get_form_kwargs(self):
-        kwargs = super(OldPasswordView, self).get_form_kwargs()
+        kwargs = super(RequirePasswordView, self).get_form_kwargs()
         kwargs["request"] = self.request
         return kwargs
 
+    def form_valid(self, form):
+        self.request.session["password_not_required_auth"] = True
+        next_url = self.request.GET.get(REDIRECT_FIELD_NAME) or "/"
+        return redirect(next_url)
+
 
 @method_decorator(login_required, name="dispatch")
+@method_decorator(password_required, name="dispatch")
 class UserCredentialsUpdateView(UpdateView):
     form_class = UpdateUserCredentialsForm
     success_url = reverse_lazy("profile details")
@@ -76,22 +74,19 @@ class UserCredentialsUpdateView(UpdateView):
         return self.request.user
 
     def get_context_data(self, **kwargs):
-        self.extra_context = {
-            "profile": self.request.user.profile
-        }
+        self.extra_context = {"profile": self.request.user.profile}
         return super(UserCredentialsUpdateView, self).get_context_data(**kwargs)
 
 
 @method_decorator(login_required, name="dispatch")
+@method_decorator(password_required, name="dispatch")
 class UserPasswordUpdateView(FormView):
     form_class = UpdateUserPasswordForm
     success_url = reverse_lazy("update user credentials")
     template_name = "fitness_calculator_auth/update_user_password.html"
 
     def get_context_data(self, **kwargs):
-        self.extra_context = {
-            "profile": self.request.user.profile
-        }
+        self.extra_context = {"profile": self.request.user.profile}
         return super(UserPasswordUpdateView, self).get_context_data(**kwargs)
 
     def get_form_kwargs(self):
@@ -106,6 +101,7 @@ class UserPasswordUpdateView(FormView):
 
 @method_decorator(login_required, name="dispatch")
 class UserDeleteView(DeleteView):
+    object = None
     model = FitnessCalculatorUser
     template_name = "profile/profile_delete.html"
     success_url = reverse_lazy("sign in")
@@ -115,7 +111,7 @@ class UserDeleteView(DeleteView):
         return super(UserDeleteView, self).get_object()
 
     def get_context_data(self, **kwargs):
-        profile = Profile.objects.get(pk=self.get_object().pk)
+        profile = get_object_or_404(Profile, pk=self.get_object().pk)
         self.extra_context = {
             "form": ProfileForm(
                 initial=profile.__dict__,

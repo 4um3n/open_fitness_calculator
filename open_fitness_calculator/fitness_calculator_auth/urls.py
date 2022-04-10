@@ -1,15 +1,15 @@
 from django.urls import path
 from open_fitness_calculator.fitness_calculator_auth.views import SignUpView, SignInView, SignOutView, \
-    UserCredentialsUpdateView, UserDeleteView, UserPasswordUpdateView, OldPasswordView
+    UserCredentialsUpdateView, UserDeleteView, UserPasswordUpdateView, RequirePasswordView
 
 urlpatterns = [
     path('sign-up/', SignUpView.as_view(), name="sign up"),
     path('sign-in/', SignInView.as_view(), name="sign in"),
     path('sign-out/', SignOutView.as_view(), name="sign out"),
     path(
-        'confirm-old-password/',
-        OldPasswordView.as_view(),
-        name="confirm old password"
+        'password-required/',
+        RequirePasswordView.as_view(),
+        name="password required"
     ),
     path(
         'user-update-credentials/',

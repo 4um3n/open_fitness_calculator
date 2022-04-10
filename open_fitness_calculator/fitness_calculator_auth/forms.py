@@ -69,8 +69,8 @@ class SignInForm(AuthenticationForm, FormFieldsController):
         return self.authenticated_user
 
 
-class OldPasswordForm(forms.Form):
-    old_password = forms.CharField(
+class RequirePasswordForm(forms.Form):
+    password = forms.CharField(
         widget=forms.PasswordInput(
             attrs={
                 "autofocus": True,
@@ -82,11 +82,11 @@ class OldPasswordForm(forms.Form):
 
     def __init__(self, request, *args, **kwargs):
         self.request = request
-        super(OldPasswordForm, self).__init__(*args, **kwargs)
+        super(RequirePasswordForm, self).__init__(*args, **kwargs)
 
     def clean(self):
         username = self.request.user.username
-        password = self.cleaned_data.get('old_password')
+        password = self.cleaned_data.get('password')
 
         if password:
             user_cache = authenticate(self.request, username=username, password=password)
@@ -115,7 +115,7 @@ class UpdateUserPasswordForm(SetPasswordForm, FormFieldsController):
         "new_password2": "Confirm New Password",
     }
     widgets_attrs = {
-        "new_password1": {"autofocus": True,}
+        "new_password1": {"autofocus": True}
     }
 
     def __init__(self, *args, **kwargs):
