@@ -20,7 +20,7 @@ $ touch .env # put your environment variables here: example => export DB_PORT=54
 $ mkdir -p venv
 $ python3 -m venv .venv/
 $ source venv/bin/activate
-$ source .env/
+$ source .env
 $ pip3 install -r requirements.txt
 $ python manage.py runserver
 ```
