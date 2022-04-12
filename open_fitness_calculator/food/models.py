@@ -1,15 +1,33 @@
 from django.db import models
 from django.core.validators import MinValueValidator
 
-from open_fitness_calculator.core.mixins import FoodPieChartMixin, FoodMacrosConvertorMixin
 from open_fitness_calculator.diary.models import Diary
-from open_fitness_calculator.fitness_calculator_auth.models import FitnessCalculatorUser
 from open_fitness_calculator.profiles.models import Profile
+from open_fitness_calculator.core.mixins import FoodPieChartMixin, FoodMacrosConvertorMixin
+from open_fitness_calculator.fitness_calculator_auth.models import FitnessCalculatorUser
 
 
 class FoodCategory(models.Model):
+    RED_MEAT_CHOICE = "red_meat"
+    WHITE_MEAT_CHOICE = "white_meat"
+    FISH_CHOICE = "fish"
+    ROOT_VEGETABLES_CHOICE = "root_vegetables"
+    GREEN_LEAFY_VEGETABLES_CHOICE = "green_leafy_vegetables"
+    FRUIT_CHOICE = "fruits"
+    BERRIE_CHOICE = "berries"
+    NAME_CHOICES = (
+        (RED_MEAT_CHOICE, "Red Meat"),
+        (WHITE_MEAT_CHOICE, "White Meat"),
+        (FRUIT_CHOICE, "Fish"),
+        (RED_MEAT_CHOICE, "Root Vegetables"),
+        (GREEN_LEAFY_VEGETABLES_CHOICE, "Green Leafy Vegetables"),
+        (FRUIT_CHOICE, "Fruits"),
+        (BERRIE_CHOICE, "Berries"),
+    )
+
     name = models.CharField(
         max_length=25,
+        choices=NAME_CHOICES,
     )
 
     class Meta:

@@ -1,14 +1,14 @@
-from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
-from django.shortcuts import redirect, get_object_or_404
-from django.contrib.auth import login, logout, REDIRECT_FIELD_NAME
 from django.utils.decorators import method_decorator
-from django.views.generic import CreateView, FormView, RedirectView, UpdateView, DeleteView
-
+from django.shortcuts import redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import login, logout, REDIRECT_FIELD_NAME
 from open_fitness_calculator.core.decorators import password_required, unauthenticated_required
+
 from open_fitness_calculator.profiles.models import Profile
 from open_fitness_calculator.profiles.forms import ProfileForm, GoalForm
 from open_fitness_calculator.fitness_calculator_auth.models import FitnessCalculatorUser
+from django.views.generic import CreateView, FormView, RedirectView, UpdateView, DeleteView
 from open_fitness_calculator.fitness_calculator_auth.forms import SignUpForm, SignInForm, \
     UpdateUserCredentialsForm, UpdateUserPasswordForm, RequirePasswordForm
 

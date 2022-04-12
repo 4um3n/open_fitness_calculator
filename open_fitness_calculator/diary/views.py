@@ -14,6 +14,7 @@ from open_fitness_calculator.profiles.forms import MacrosPercentsForm
 
 @method_decorator(login_required, name="dispatch")
 class DiaryBaseView(ListView):
+    object_list = []
     model = Diary
     paginate_by = 1
     diary_object = None
@@ -47,7 +48,6 @@ class DiaryBaseView(ListView):
         self.diary_object = page.object_list.get()
 
         self.extra_context = {
-            'paginator': paginator,
             'page_obj': page,
             "diary": self.diary_object,
         }
@@ -168,7 +168,7 @@ class MacrosView(DiaryBaseView, UpdateView):
 
     def get_context_data(self, **kwargs):
         diary = self.diary_object
-        p_grams, c_grams, f_grams = diary.meals_macros
+        p_grams, c_grams, f_grams = diary.meals_base_macros
         eaten_p_percents, eaten_c_percents, eaten_f_percents = diary.get_meals_macros_percents()
 
         self.extra_context.update({

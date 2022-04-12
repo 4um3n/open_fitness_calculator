@@ -1,6 +1,6 @@
 from django import forms
 from django.core.validators import MinValueValidator
-from open_fitness_calculator.core.forms import FitnessCalculatorModelForm
+from open_fitness_calculator.core.forms import FitnessCalculatorModelForm, BaseSearchForm
 from open_fitness_calculator.core.mixins import FoodMacrosConvertorMixin
 from open_fitness_calculator.food.models import Food, DiaryFood
 
@@ -19,18 +19,7 @@ class FoodQuantityForm(forms.ModelForm):
         }
 
 
-class SearchFoodForm(forms.Form):
-    searched_string = forms.CharField(
-        required=False,
-        label="",
-        widget=forms.TextInput(
-            attrs={
-                "class": "search-bar",
-                "placeholder": "Search...",
-            },
-        ),
-    )
-
+class SearchFoodForm(BaseSearchForm):
     accurate_search = forms.BooleanField(
         label="",
         required=False,
@@ -93,19 +82,19 @@ class FoodForm(FitnessCalculatorModelForm, FoodMacrosConvertorMixin):
         super(FoodForm, self).__init__(*args, **kwargs)
 
     def clean(self):
-        e = self.cleaned_data.get("energy") or 0
+        provided_energy = self.cleaned_data.get("energy") or 0
         required_macros = (
             self.cleaned_data.get("protein") or 0,
             self.cleaned_data.get("carbs") or 0,
             self.cleaned_data.get("fat") or 0,
         )
 
-        if any(required_macros) and e:
+        if any(required_macros) and provided_energy:
             energy = int(sum(self.get_calories_form_macros(*required_macros)))
-            if energy != e and not self.is_open_food:
+            if energy != provided_energy and not self.is_open_food:
                 self.add_error(
                     "energy",
-                    f"You set the energy to {e}, but it seems to be {energy}"
+                    f"You set the energy to {provided_energy}, but it seems to be {energy}"
                 )
 
         return super(FoodForm, self).clean()

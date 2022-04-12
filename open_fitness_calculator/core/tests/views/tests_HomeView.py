@@ -1,11 +1,10 @@
 from django.test import TestCase
 from django.urls import reverse
-
-from open_fitness_calculator.fitness_calculator_auth.models import FitnessCalculatorUser
+from django.contrib.auth import get_user_model
 
 
 class HomeViwTests(TestCase):
-    __MODEL = FitnessCalculatorUser
+    __USER__MODEL = get_user_model()
     __VALID_TEMPLATE_NAME = "core/home.html"
     __VALID_URL = reverse("home")
     __VALID_FOOD_LEN_PER_PAGE = 6
@@ -17,7 +16,7 @@ class HomeViwTests(TestCase):
     __VALID_OPEN_FOOD_NAME = "kiwi"
 
     def setUp(self) -> None:
-        self.user = self.__MODEL.objects.create_user(**self.__VALID_USER_CREDENTIALS)
+        self.user = self.__USER__MODEL.objects.create_user(**self.__VALID_USER_CREDENTIALS)
         self.user.save()
         self.client.login(**self.__VALID_USER_CREDENTIALS)
         self.diary = self.user.profile.diary_set.get(is_completed=False)
@@ -25,8 +24,7 @@ class HomeViwTests(TestCase):
     def test_get__expect_correct_template_name(self):
         response = self.client.get(self.__VALID_URL)
         self.assertTemplateUsed(response, self.__VALID_TEMPLATE_NAME)
-
-        self.user.delete()
+        self.__USER__MODEL.objects.all().delete()
 
     def test_get__expect_correct_context(self):
         response = self.client.get(self.__VALID_URL)
@@ -38,8 +36,7 @@ class HomeViwTests(TestCase):
         self.assertEqual(int(self.diary.eaten_calories), response.context.get("eaten_calories"))
         self.assertEqual(int(self.diary.exercises_calories), response.context.get("exercises_calories"))
         self.assertEqual(int(self.diary.remaining_calories), response.context.get("remaining_calories"))
-
-        self.user.delete()
+        self.__USER__MODEL.objects.all().delete()
 
     def test_post__when_accurate_search_off__expect_correct_context(self):
         request_data = {
@@ -50,8 +47,7 @@ class HomeViwTests(TestCase):
 
         self.assertEqual(1, response.context.get("page_obj").number)
         self.assertEqual(self.__VALID_FOOD_LEN_PER_PAGE, len(response.context.get("food")))
-
-        self.user.delete()
+        self.__USER__MODEL.objects.all().delete()
 
     def test_post__when_accurate_search_on__expect_correct_context(self):
         request_data = {
@@ -62,8 +58,7 @@ class HomeViwTests(TestCase):
 
         self.assertEqual(1, response.context.get("page_obj").number)
         self.assertEqual(self.__VALID_FOOD_LEN_PER_PAGE, len(response.context.get("food")))
-
-        self.user.delete()
+        self.__USER__MODEL.objects.all().delete()
 
     def test_get__when_post_was_successful__expect_correct_food_to_be_cached(self):
         request_data = {
@@ -80,5 +75,4 @@ class HomeViwTests(TestCase):
 
         self.assertEqual(2, response.context.get("page_obj").number)
         self.assertEqual(self.__VALID_FOOD_LEN_PER_PAGE, len(response.context.get("food")))
-
-        self.user.delete()
+        self.__USER__MODEL.objects.all().delete()

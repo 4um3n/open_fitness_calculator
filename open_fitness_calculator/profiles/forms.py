@@ -33,18 +33,19 @@ class ProfileForm(FitnessCalculatorModelForm):
         "weight": [MinValueValidator(1), MaxValueValidator(500), ],
         "height": [MinValueValidator(100), MaxValueValidator(250), ],
     }
+    widgets_attrs = {
+        "profile_picture": {
+            "onchange": "profilePictureChanged()",
+            "hidden": "hidden",
+        },
+    }
 
     class Meta:
         model = Profile
         exclude = ["user", "is_admin", "is_staff", "requested_staff"]
         widgets = {
             "gender": forms.RadioSelect(),
-            "profile_picture": forms.FileInput(
-                attrs={
-                    "onchange": "profilePictureChanged()",
-                    "hidden": "hidden",
-                },
-            ),
+            "profile_picture": forms.FileInput(),
         }
 
 
@@ -90,6 +91,6 @@ class MacrosPercentsForm(FitnessCalculatorModelForm):
 
     def clean(self):
         if sum(self.cleaned_data.values()) != 100:
-            self.add_error("protein", "The sum of th percents must be equal to 100")
+            self.add_error("__all__", "The sum of the percents must be equal to 100")
 
         return super(MacrosPercentsForm, self).clean()

@@ -8,7 +8,7 @@
         {% include "core/search_bar.html" %}
 
         {% for current_exercise in exercises %}
-            <a class="btn add-food list-food" href="{% url "exercise" current_exercise.pk diary_pk %}">
+            <a class="btn add-food list-food" href="{% url "log exercise" current_exercise.pk diary_pk %}">
                 <label class="food-name list-food">
                     {{ current_exercise.name }}
                 </label>

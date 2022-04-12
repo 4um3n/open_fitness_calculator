@@ -1,6 +1,6 @@
 from django import forms
 
-from open_fitness_calculator.core.forms import FitnessCalculatorModelForm
+from open_fitness_calculator.core.forms import FitnessCalculatorModelForm, BaseSearchForm
 from open_fitness_calculator.exercises.models import Exercise, DiaryExercise
 
 
@@ -18,17 +18,8 @@ class ExerciseQuantityForm(forms.ModelForm):
         }
 
 
-class SearchExerciseForm(forms.Form):
-    searched_string = forms.CharField(
-        required=False,
-        label="",
-        widget=forms.TextInput(
-            attrs={
-                "class": "search-bar",
-                "placeholder": "Search...",
-            },
-        ),
-    )
+class SearchExerciseForm(BaseSearchForm):
+    pass
 
 
 class ExerciseForm(FitnessCalculatorModelForm):

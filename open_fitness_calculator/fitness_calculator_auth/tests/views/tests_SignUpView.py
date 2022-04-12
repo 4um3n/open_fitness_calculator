@@ -1,11 +1,10 @@
 from django.test import TestCase
 from django.urls import reverse
-
-from open_fitness_calculator.fitness_calculator_auth.models import FitnessCalculatorUser
+from django.contrib.auth import get_user_model
 
 
 class SignUpViewTests(TestCase):
-    __MODEL = FitnessCalculatorUser
+    __USER__MODEL = get_user_model()
     __VALID_TEMPLATE_NAME = "fitness_calculator_auth/sign_up.html"
     __VALID_URL = reverse("sign up")
     __VALID_REDIRECT_URL_HOME = reverse("home")
@@ -21,12 +20,12 @@ class SignUpViewTests(TestCase):
         self.assertTemplateUsed(response, self.__VALID_TEMPLATE_NAME)
 
     def test_get__when_user_logged_in__expect_to_redirect(self):
-        user = self.__MODEL.objects.create_user(**self.__VALID_USER_CREDENTIALS)
+        user = self.__USER__MODEL.objects.create_user(**self.__VALID_USER_CREDENTIALS)
         user.save()
         self.client.login(**self.__VALID_USER_CREDENTIALS)
         response = self.client.get(self.__VALID_URL)
         self.assertRedirects(response, self.__VALID_REDIRECT_URL_HOME)
-        user.delete()
+        self.__USER__MODEL.objects.all().delete()
 
     def test_post__when_successful__expect_to_redirect(self):
         username, email, password = self.__VALID_USER_CREDENTIALS.values()
@@ -39,4 +38,4 @@ class SignUpViewTests(TestCase):
         response = self.client.post(self.__VALID_URL, data=request_data)
 
         self.assertRedirects(response, self.__VALID_REDIRECT_URL_PROFILE)
-        self.__MODEL.objects.first().delete()
+        self.__USER__MODEL.objects.all().delete()

@@ -10,7 +10,7 @@
         <a class="btn btn-primary create-food" href="{% url "create user exercise" %}">CREATE EXERCISE</a>
 
         {% for current_exercise in exercises %}
-            <a class="btn add-food list-food" href="{% url "user exercise" current_exercise.pk %}">
+            <a class="btn add-food list-food" href="{% url "exercise" current_exercise.pk %}">
                 <label class="food-name list-food">
                     {{ current_exercise.name }}
                 </label>

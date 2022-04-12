@@ -1,11 +1,10 @@
 from django.test import TestCase
 from django.urls import reverse
-
-from open_fitness_calculator.fitness_calculator_auth.models import FitnessCalculatorUser
+from django.contrib.auth import get_user_model
 
 
 class UserPasswordUpdateViewTests(TestCase):
-    __MODEL = FitnessCalculatorUser
+    __USER_MODEL = get_user_model()
     __VALID_TEMPLATE_NAME = "fitness_calculator_auth/update_user_password.html"
     __VALID_URL = reverse("update user password")
     __VALID_REDIRECT_URL = reverse("password required")
@@ -16,7 +15,7 @@ class UserPasswordUpdateViewTests(TestCase):
     }
 
     def setUp(self) -> None:
-        self.user = FitnessCalculatorUser.objects.create_user(**self.__VALID_USER_CREDENTIALS)
+        self.user = self.__USER_MODEL.objects.create_user(**self.__VALID_USER_CREDENTIALS)
         self.user.save()
         self.client.login(**self.__VALID_USER_CREDENTIALS)
 
@@ -25,7 +24,7 @@ class UserPasswordUpdateViewTests(TestCase):
         expected_redirect_url = f"{self.__VALID_REDIRECT_URL}?next={self.__VALID_URL}"
 
         self.assertRedirects(response, expected_redirect_url)
-        self.user.delete()
+        self.__USER_MODEL.objects.all().delete()
 
     def test_get__expect_correct_template_used(self):
         request_data = {"password": self.__VALID_USER_CREDENTIALS.get("password")}
@@ -34,7 +33,7 @@ class UserPasswordUpdateViewTests(TestCase):
         response = self.client.get(self.__VALID_URL)
 
         self.assertTemplateUsed(response, self.__VALID_TEMPLATE_NAME)
-        self.user.delete()
+        self.__USER_MODEL.objects.all().delete()
 
     def test_get__expect_correct_context(self):
         request_data = {"password": self.__VALID_USER_CREDENTIALS.get("password")}
@@ -43,4 +42,4 @@ class UserPasswordUpdateViewTests(TestCase):
         response = self.client.get(self.__VALID_URL)
 
         self.assertEqual(self.user.profile, response.context_data.get("profile"))
-        self.user.delete()
+        self.__USER_MODEL.objects.all().delete()

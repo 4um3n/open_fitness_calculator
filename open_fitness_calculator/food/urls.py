@@ -7,7 +7,7 @@ urlpatterns = [
     path(
         '<int:food_pk>/<int:diary_pk>/<str:meal>',
         LogFoodView.as_view(),
-        name='food'
+        name='log food'
     ),
     path(
         'meal/<int:diary_pk>/<int:meal_pk>/',
@@ -15,7 +15,7 @@ urlpatterns = [
         name='meal food'
     ),
     path(
-        'delete-from-diary/<int:diary_pk>/<int:meal_pk>/',
+        'delete-from-diary/<int:meal_pk>/',
         DeleteFoodFromDiaryView.as_view(),
         name='delete food from diary'
     ),
@@ -30,9 +30,9 @@ urlpatterns = [
         name='list user food'
     ),
     path(
-        'user-food/<int:food_pk>/',
+        'food/<int:food_pk>/',
         FoodView.as_view(),
-        name='user food'
+        name='food'
     ),
     path(
         'create-user-food/',

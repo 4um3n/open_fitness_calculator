@@ -2,23 +2,22 @@ import os
 from django.dispatch import receiver
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models.signals import post_save, pre_delete, pre_save
+
 from open_fitness_calculator.diary.models import Diary
 from open_fitness_calculator.profiles.models import MacrosPercents, Goal, Profile, DailyNutrients
 
 
 @receiver(pre_save, sender=Profile)
-def delete_profile_picture_pre_save(sender, instance, *args, **kwargs):
-    try:
-        profile = sender.objects.get(pk=instance.pk)
-        old_picture_path = profile.profile_picture.path
+def profile_pre_save__delete_profile_picture(sender, instance, *args, **kwargs):
+    if sender.objects.filter(pk=instance.pk).exists():
+        old_picture_path = instance.profile_picture.path
+
         if old_picture_path.split(os.sep)[-2] != "default" and old_picture_path != instance.profile_picture.path:
-            profile.profile_picture.delete(save=False)
-    except ObjectDoesNotExist:
-        pass
+            instance.profile_picture.delete(save=False)
 
 
 @receiver(post_save, sender=Profile)
-def post_save_profile(sender, instance, *args, **kwargs):
+def profile_post_save(sender, instance, *args, **kwargs):
     if not Goal.objects.filter(profile=instance).exists():
         Goal.objects.create(profile=instance).save()
 
@@ -38,7 +37,7 @@ def post_save_profile(sender, instance, *args, **kwargs):
 
 
 @receiver(pre_delete, sender=Profile)
-def delete_profile_picture_pre_delete_profile(sender, instance, *args, **kwargs):
+def profile_pre_delete__delete_profile_picture(sender, instance, *args, **kwargs):
     for food in instance.food_set.all():
         if not food.is_admin:
             food.delete()
@@ -52,7 +51,7 @@ def delete_profile_picture_pre_delete_profile(sender, instance, *args, **kwargs)
 
 
 @receiver(post_save, sender=MacrosPercents)
-def update_daily_nutrients_macros(sender, instance, *args, **kwargs):
+def macros_percents__update_daily_nutrients_macros(sender, instance, *args, **kwargs):
     profile = instance.profile
 
     if DailyNutrients.objects.filter(profile=profile).exists():

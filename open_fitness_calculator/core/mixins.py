@@ -9,21 +9,21 @@ from open_fitness_calculator.settings import BASE_DIR
 class FoodMacrosConvertorMixin:
     energy, protein, carbs, fat = 0, 0, 0, 0
 
-    def get_calories_form_macros(self, p=None, c=None, f=None):
-        p = p or self.protein
-        c = c or self.carbs
-        f = f or self.fat
+    def get_calories_form_macros(self, protein_grams=None, carbs_grams=None, fat_grams=None):
+        protein_grams = protein_grams or self.protein
+        carbs_grams = carbs_grams or self.carbs
+        fat_grams = fat_grams or self.fat
 
-        protein_calories = p * 4 if p and p > 0 else 0
-        carbs_calories = c * 4 if c and c > 0 else 0
-        fat_calories = f * 9 if f and f > 0 else 0
+        protein_calories = protein_grams * 4 if protein_grams and protein_grams > 0 else 0
+        carbs_calories = carbs_grams * 4 if carbs_grams and carbs_grams > 0 else 0
+        fat_calories = fat_grams * 9 if fat_grams and fat_grams > 0 else 0
 
         return protein_calories, carbs_calories, fat_calories
 
-    def get_percents_form_macros(self, e=None, p=None, c=None, f=None):
-        energy = e or self.energy
-        p_calories, c_calories, f_calories = self.get_calories_form_macros(p, c, f)
-        keys = deque(["p", "c", "f"])
+    def get_percents_form_macros(self, energy=None, protein_grams=None, carbs_grams=None, fat_grams=None):
+        energy = energy or self.energy
+        p_calories, c_calories, f_calories = self.get_calories_form_macros(protein_grams, carbs_grams, fat_grams)
+        percents_keys = deque(["p", "c", "f"])
 
         percents = {
             "p": round(p_calories / energy * 100, 2) if energy and energy > 0 and p_calories > 0 else 0,
@@ -33,14 +33,14 @@ class FoodMacrosConvertorMixin:
 
         if any(percents.values()):
             while sum(percents.values()) > 100:
-                if percents[keys[0]] > 0:
-                    percents[keys[0]] -= 0.01
-                keys.append(keys.popleft())
+                if percents[percents_keys[0]] > 0:
+                    percents[percents_keys[0]] -= 0.01
+                percents_keys.append(percents_keys.popleft())
 
             while sum(percents.values()) < 100:
-                if percents[keys[0]] > 0:
-                    percents[keys[0]] += 0.01
-                keys.append(keys.popleft())
+                if percents[percents_keys[0]] > 0:
+                    percents[percents_keys[0]] += 0.01
+                percents_keys.append(percents_keys.popleft())
 
         return round(percents["p"], 2), round(percents["c"], 2), round(percents["f"], 2)
 
@@ -80,17 +80,15 @@ class DailyCaloriesCalculatorMixin:
         return tee
 
     def _calculate_daily_nutrients(self):
-        p_percents, c_percents, f_percents = self.macros_percents
-        protein_grams = (self.daily_calories * p_percents) // 4
+        protein_percents, carbs_percents, fat_percents = self.macros_percents
+        protein_grams = (self.daily_calories * protein_percents) // 4
 
-        carbs_grams = (self.daily_calories * c_percents) // 4
+        carbs_grams = (self.daily_calories * carbs_percents) // 4
         carbs_sugar_grams = (self.daily_calories * 0.09) // 4 if carbs_grams else 0
-
         fiber = 38 if self.profile.gender == "male" else 25
 
-        fat_grams = (self.daily_calories * f_percents) // 9
+        fat_grams = (self.daily_calories * fat_percents) // 9
         fat_saturated_grams = (self.daily_calories * 0.06) // 9 if fat_grams else 0
-
         return protein_grams, carbs_grams, carbs_sugar_grams, fiber, fat_grams, fat_saturated_grams
 
 
@@ -100,12 +98,10 @@ class PieChartCreationMixin:
 
     def create_pie_chart(self):
         save_path, sizes = self.full_file_path, self.sizes()
-        # labels = "P", "C", "F"
         plt.rcParams["figure.figsize"] = (2.5, 2.5)
         colors = "#017250FF", "#FF8000FF", "#FF0062FF", "#004378FF"
 
         sizes = [int(s) for s in sizes if s >= 0]
-
         if sum(sizes) <= 0 or len(sizes) > 4:
             sizes = [1]
             colors = ["#707070FF"]
@@ -113,16 +109,7 @@ class PieChartCreationMixin:
         explode = [0.1 for _ in range(len(sizes))]
 
         fig1, ax1 = plt.subplots()
-        # patches, texts, auto = ax1.pie(
-        ax1.pie(
-            sizes,
-            colors=colors,
-            explode=explode,
-            startangle=90,
-            # autopct='%0.2f%%',
-            # shadow=True,
-        )
-        # plt.legend(patches, labels, loc="best")
+        ax1.pie(sizes, colors=colors, explode=explode, startangle=90)
         plt.savefig(save_path, transparent=True)
 
 
@@ -151,11 +138,9 @@ class BasePieChartMixin(PieChartCreationMixin):
 
     def get_file_path(self):
         if not os.path.isfile(self.full_file_path):
-            file_path = self.default_file_path
-        else:
-            file_path = self.file_path
+            return self.default_file_path
 
-        return file_path
+        return self.file_path
 
 
 class FoodPieChartMixin(BasePieChartMixin):
@@ -202,7 +187,7 @@ class BaseOpenFoodRepoMixin:
         "vitamin_a_iu": "vitamin_a",
     }
 
-    KEY = "4464e960268f9578cee636761b8561a2"
+    KEY = os.environ.get("OPEN_FOOD_REPO_API_KEY")
     BASE_URL = "https://www.foodrepo.org/api/v3"
     ENDPOINT = ""
     HEADERS = {
@@ -296,9 +281,7 @@ class SearchOpenFoodMixin(BaseOpenFoodRepoMixin):
         cleaned_data = []
 
         for name, nutrients in sorted(data.items(), key=lambda kvp: kvp[0]):
-            cleaned_data.append((
-                name, [kvp for kvp in nutrients.items()]
-            ))
+            cleaned_data.append((name, [kvp for kvp in nutrients.items()]))
 
         return cleaned_data
 

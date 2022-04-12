@@ -1,21 +1,21 @@
 from itertools import chain
-from django.core.exceptions import ObjectDoesNotExist
-from django.http import QueryDict
-from django.urls import reverse_lazy
-from django.shortcuts import redirect, get_object_or_404
-from django.utils.decorators import method_decorator
-from django.contrib.auth.decorators import login_required
-from django.views.decorators.cache import never_cache
 from rest_framework import status
-from rest_framework.response import Response
-from rest_framework.views import APIView
+from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import never_cache
+from django.shortcuts import redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
 
+from django.http import QueryDict
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from django.core.exceptions import ObjectDoesNotExist
 from open_fitness_calculator.diary.models import Diary
 from open_fitness_calculator.food.models import Food, DiaryFood
+from open_fitness_calculator.food.serializers import FoodSerializer
+from open_fitness_calculator.core.mixins import GetOpenFoodMixin, FoodMacrosConvertorMixin
 from open_fitness_calculator.food.forms import FoodForm, SearchFoodForm, FoodQuantityForm, AdminFoodForm
 from django.views.generic import CreateView, UpdateView, FormView, RedirectView, DetailView, DeleteView
-from open_fitness_calculator.core.mixins import GetOpenFoodMixin, FoodMacrosConvertorMixin
-from open_fitness_calculator.food.serializers import FoodSerializer
 
 
 @method_decorator(never_cache, name="dispatch")
@@ -80,15 +80,13 @@ class DiaryFoodView(UpdateView):
             self.extra_context.get("carbs"),
             self.extra_context.get("fat"),
         )
-        self.extra_context.update(
-            {
-                "protein_percents": round(p, 2),
-                "carbs_percents": round(c, 2),
-                "fat_percents": round(f, 2),
-                "meal": meal,
-                "diary_pk": self.kwargs.get("diary_pk"),
-            }
-        )
+        self.extra_context.update({
+            "protein_percents": round(p, 2),
+            "carbs_percents": round(c, 2),
+            "fat_percents": round(f, 2),
+            "meal": meal,
+            "diary_pk": self.kwargs.get("diary_pk"),
+        })
         return super(DiaryFoodView, self).get_context_data(**kwargs)
 
 
@@ -140,7 +138,6 @@ class ListUserFoodView(FormView):
     def get_food(self):
         profile = self.request.user.profile
         user_food = Food.objects.filter(profile=profile)
-        # admin_food = Food.objects.filter(is_admin=True) if profile.is_staff or profile.is_admin else []
         admin_food = Food.objects.filter(is_admin=True)
         return list(sorted(chain(user_food, admin_food), key=lambda f: f.name))
 
@@ -149,10 +146,7 @@ class ListUserFoodView(FormView):
 
     def get_context_data(self, **kwargs):
         food = kwargs.get("food")
-
-        self.extra_context = {
-            "food": food if food is not None else self.get_food(),
-        }
+        self.extra_context = {"food": food if food is not None else self.get_food()}
         return super(ListUserFoodView, self).get_context_data(**kwargs)
 
     def form_valid(self, form):
@@ -211,10 +205,8 @@ class UpdateFoodView(UpdateView):
     template_name = "food/user_food_update.html"
 
     def get_success_url(self):
-        kwargs = {
-            "food_pk": self.kwargs.get("food_pk"),
-        }
-        return reverse_lazy("user food", kwargs=kwargs)
+        kwargs = {"food_pk": self.kwargs.get("food_pk")}
+        return reverse_lazy("food", kwargs=kwargs)
 
 
 @method_decorator(login_required, name="dispatch")
@@ -239,10 +231,8 @@ class SaveLocallyOpenFoodView(CreateView, GetOpenFoodMixin, FoodMacrosConvertorM
     template_name = "food/save_open_food.html"
 
     def get_success_url(self):
-        kwargs = {
-            "food_pk": self.kwargs.get("food_pk"),
-        }
-        return reverse_lazy("user food", kwargs=kwargs)
+        kwargs = {"food_pk": self.kwargs.get("food_pk")}
+        return reverse_lazy("food", kwargs=kwargs)
 
     def get_context_data(self, **kwargs):
         food_data = self.get_food_by_id(self.kwargs.get("food_pk"))
@@ -255,14 +245,11 @@ class SaveLocallyOpenFoodView(CreateView, GetOpenFoodMixin, FoodMacrosConvertorM
             food_data.get("carbs"),
             food_data.get("fat"),
         )
-        self.extra_context.update(
-            {
-                "protein_percents": p_percents,
-                "carbs_percents": c_percents,
-                "fat_percents": f_percents,
-                "form": self.get_form(),
-            }
-        )
+        self.extra_context.update({
+            "protein_percents": p_percents,
+            "carbs_percents": c_percents,
+            "fat_percents": f_percents,
+        })
         return super(SaveLocallyOpenFoodView, self).get_context_data(**kwargs)
 
     def get_form_kwargs(self):
@@ -274,8 +261,8 @@ class SaveLocallyOpenFoodView(CreateView, GetOpenFoodMixin, FoodMacrosConvertorM
     def form_valid(self, form):
         food = form.save(commit=False)
 
-        user_food_names = [f.name for f in self.model.objects.filter(profile=self.request.user.profile)]
-        if form.cleaned_data.get("name") in user_food_names:
+        user_food_names = [f.name.lower() for f in self.model.objects.filter(profile=self.request.user.profile)]
+        if form.cleaned_data.get("name").lower() in user_food_names:
             form.add_error("name", "Food with that name already exists")
             return self.form_invalid(form)
 
@@ -286,7 +273,8 @@ class SaveLocallyOpenFoodView(CreateView, GetOpenFoodMixin, FoodMacrosConvertorM
 
 
 class ListCreateFoodAPIView(APIView):
-    FOOD_INITIAL_DATA = {
+    model = Food
+    __FOOD_INITIAL_DATA = {
         "energy": 0,
         "protein": 0,
         "carbs": 0,
@@ -305,10 +293,9 @@ class ListCreateFoodAPIView(APIView):
         "vitamin_a": 0,
         "vitamin_c": 0,
     }
-    model = Food
 
     def extend_food_data(self, data: dict) -> dict:
-        extended_data = {key: 0 for key in self.FOOD_INITIAL_DATA if key not in data}
+        extended_data = {key: 0 for key in self.__FOOD_INITIAL_DATA if key not in data}
         validated_data = QueryDict('', mutable=True)
         validated_data.update(data)
         validated_data.update(extended_data)
@@ -324,13 +311,14 @@ class ListCreateFoodAPIView(APIView):
     def post(self, request, *args, **kwargs):
         data = self.extend_food_data(request.data)
         food_serializer = FoodSerializer(data=data)
+
         if food_serializer.is_valid():
             try:
                 food_serializer.save(profile=self.request.user.profile)
             except AttributeError as ex:
                 return Response({"error": str(ex)}, status=status.HTTP_400_BAD_REQUEST)
-
             return Response(food_serializer.data, status=status.HTTP_201_CREATED)
+
         return Response(food_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -353,6 +341,7 @@ class DetailUpdateDeleteFoodAPIView(APIView):
 
     def get(self, request, *args, **kwargs):
         food = self.get_object()
+
         if isinstance(food, Response):
             return food
 
@@ -361,6 +350,7 @@ class DetailUpdateDeleteFoodAPIView(APIView):
 
     def put(self, request, *args, **kwargs):
         food = self.get_object()
+
         if isinstance(food, Response):
             return food
 
@@ -368,13 +358,16 @@ class DetailUpdateDeleteFoodAPIView(APIView):
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
         food_serializer = FoodSerializer(instance=food, data=request.data)
+
         if food_serializer.is_valid():
             food_serializer.save()
             return Response(food_serializer.data, status=status.HTTP_201_CREATED)
+
         return Response(food_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, *args, **kwargs):
         food = self.get_object()
+
         if isinstance(food, Response):
             return food
 

@@ -10,7 +10,7 @@
         <a class="btn btn-primary create-food" href="{% url "create user food" %}">CREATE FOOD</a>
 
         {% for current_food in food %}
-            <a class="btn add-food list-food" href="{% url "user food" current_food.pk %}">
+            <a class="btn add-food list-food" href="{% url "food" current_food.pk %}">
                 <label class="food-name list-food">
                     {{ current_food.name }}
                 </label>

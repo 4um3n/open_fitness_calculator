@@ -17,5 +17,3 @@ class DiaryForm(FitnessCalculatorModelForm):
     class Meta:
         model = Diary
         fields = ("name", "is_completed", "end_date",)
-
-

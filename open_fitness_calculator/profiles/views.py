@@ -1,9 +1,10 @@
-from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
+from django.shortcuts import get_object_or_404
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
-from django.views.generic import UpdateView, RedirectView, FormView
+
 from open_fitness_calculator.profiles.models import Profile
+from django.views.generic import UpdateView, RedirectView, FormView
 from open_fitness_calculator.profiles.forms import ProfileForm, GoalForm, StaffForm
 
 
@@ -25,9 +26,11 @@ class ProfileUpdateView(UpdateView):
 
     def post(self, request, *args, **kwargs):
         goal_form = GoalForm(request.POST, instance=self.get_object().goal)
+
         if goal_form.is_valid():
             goal_form.save()
             return super(ProfileUpdateView, self).post(request, *args, **kwargs)
+
         return super(ProfileUpdateView, self).form_invalid(goal_form)
 
 
@@ -82,6 +85,4 @@ class StaffView(FormView):
         return self.render_to_response(self.get_context_data())
 
     def get_form_kwargs(self):
-        return {
-            "initial": self.initial.copy(),
-        }
+        return {"initial": self.initial.copy()}

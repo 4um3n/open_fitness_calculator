@@ -20,7 +20,8 @@ class HomeView(ListView, FormView, SearchOpenFoodMixin):
     object_list = []
 
     def get_food(self):
-        return self.kwargs.get("food") or self.request.session.get("last_food") or []
+        return self.kwargs.get("food") or \
+               self.request.session.get("last_food") or []
 
     def get_queryset(self):
         if self.kwargs.get("page") is not None:

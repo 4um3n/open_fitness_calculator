@@ -7,7 +7,7 @@ class EmailOrUsernameModelBackend(ModelBackend):
     ModelBacked that allows authentication
     with either a username or an email address.
     """
-    UserModel = get_user_model()
+    __USER_MODEL = get_user_model()
 
     def authenticate(self, request, username=None, password=None, **kwargs):
         username = username or ""
@@ -18,8 +18,8 @@ class EmailOrUsernameModelBackend(ModelBackend):
             kwargs = {'username': username}
 
         try:
-            user = self.UserModel.objects.get(**kwargs)
+            user = self.__USER_MODEL.objects.get(**kwargs)
             if user.check_password(password):
                 return user
-        except self.UserModel.DoesNotExist:
+        except self.__USER_MODEL.DoesNotExist:
             return None

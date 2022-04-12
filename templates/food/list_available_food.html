@@ -8,7 +8,7 @@
         {% include "core/search_bar.html" %}
 
         {% for current_food in food %}
-            <a class="btn add-food list-food" href="{% url "food" current_food.id diary_pk meal_type %}">
+            <a class="btn add-food list-food" href="{% url "log food" current_food.id diary_pk meal_type %}">
                 <label class="food-name list-food">
                     {{ current_food.name }}
                 </label>

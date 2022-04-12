@@ -10,6 +10,7 @@ class Diary(models.Model):
     name = models.CharField(
         max_length=100,
         default=datetime.date.today,
+        blank=True
     )
     profile = models.ForeignKey(
         to=Profile,
@@ -30,19 +31,19 @@ class Diary(models.Model):
         verbose_name_plural = "Diaries"
 
     @property
-    def calories(self):
+    def calories(self) -> int:
         return self.profile.dailynutrients.daily_calories
 
     @property
-    def eaten_calories(self):
+    def eaten_calories(self) -> int:
         return sum([diary_food.get_eaten_calories() for diary_food in self.diaryfood_set.all()])
 
     @property
-    def exercises_calories(self):
+    def exercises_calories(self) -> int:
         return sum([diary_exercise.get_burned_calories() for diary_exercise in self.diaryexercise_set.all()])
 
     @property
-    def remaining_calories(self):
+    def remaining_calories(self) -> int:
         return self.calories - self.eaten_calories + self.exercises_calories
 
     @property
@@ -59,18 +60,18 @@ class Diary(models.Model):
         return t_cals, b_cals, l_cals, d_cals, s_cals
 
     @property
-    def meals_macros(self):
-        p_grams, c_grams, f_grams = 0, 0, 0
+    def meals_base_macros(self) -> tuple:
+        protein_grams, carbs_grams, fat_grams = 0, 0, 0
 
         for meal in self.diaryfood_set.all():
-            p_grams += meal.food.protein * meal.quantity / 100
-            c_grams += meal.food.carbs * meal.quantity / 100
-            f_grams += meal.food.fat * meal.quantity / 100
+            protein_grams += meal.food.protein * meal.quantity / 100
+            carbs_grams += meal.food.carbs * meal.quantity / 100
+            fat_grams += meal.food.fat * meal.quantity / 100
 
-        return p_grams, c_grams, f_grams
+        return protein_grams, carbs_grams, fat_grams
 
     @property
-    def macros(self):
+    def macros(self) -> dict:
         return {
             "protein": self.profile.dailynutrients.daily_protein,
             "carbohydrates": self.profile.dailynutrients.daily_carbs,
@@ -84,7 +85,7 @@ class Diary(models.Model):
         }
 
     @property
-    def micros(self):
+    def micros(self) -> dict:
         return {
             "cholesterol": self.profile.dailynutrients.daily_cholesterol,
             "sodium": self.profile.dailynutrients.daily_sodium,
@@ -96,7 +97,7 @@ class Diary(models.Model):
         }
 
     @property
-    def eaten_macros(self):
+    def eaten_macros(self) -> dict:
         eaten_macros = {
             "protein": 0,
             "carbohydrates": 0,
@@ -123,7 +124,7 @@ class Diary(models.Model):
         return eaten_macros
 
     @property
-    def eaten_micros(self):
+    def eaten_micros(self) -> dict:
         eaten_micros = {
             "cholesterol": 0,
             "sodium": 0,
@@ -146,18 +147,18 @@ class Diary(models.Model):
         return eaten_micros
 
     @property
-    def remaining_macros(self):
+    def remaining_macros(self) -> dict:
         macros = self.macros
         eaten_macros = self.eaten_macros
         return {name: value - eaten_macros[name] for name, value in macros.items()}
 
     @property
-    def remaining_micros(self):
+    def remaining_micros(self) -> dict:
         micros = self.micros
         eaten_micros = self.eaten_micros
         return {name: value - eaten_micros[name] for name, value in micros.items()}
 
-    def get_meals_calories_percents(self):
+    def get_meals_calories_percents(self) -> tuple:
         total, breakfast, lunch, dinner, snack = self.meals_calories
 
         if total <= 0:
@@ -169,18 +170,17 @@ class Diary(models.Model):
         snack_percents = snack / total * 100 if snack > 0 else 0
         return breakfast_percents, lunch_percents, dinner_percents, snack_percents
 
-    def get_meals_macros_percents(self):
+    def get_meals_macros_percents(self) -> tuple:
         if self.eaten_calories <= 0:
             return 0, 0, 0
 
         cals = self.eaten_calories
-        protein, carbs, fat = self.meals_macros
-
+        protein, carbs, fat = self.meals_base_macros
         protein *= 4
         carbs *= 4
         fat *= 9
 
-        macros_mapper = deque(["p", "c", "f"])
+        macros_percents_keys = deque(["p", "c", "f"])
         macros_percents = {
             "p": int(protein / cals * 100) if protein else 0,
             "c": int(carbs / cals * 100) if carbs else 0,
@@ -188,12 +188,12 @@ class Diary(models.Model):
         }
 
         while macros_percents["p"] + macros_percents["c"] + macros_percents["f"] > 100:
-            macros_percents[macros_mapper[0]] -= 1
-            macros_mapper.append(macros_mapper.popleft())
+            macros_percents[macros_percents_keys[0]] -= 1
+            macros_percents_keys.append(macros_percents_keys.popleft())
 
         while macros_percents["p"] + macros_percents["c"] + macros_percents["f"] < 100:
-            macros_percents[macros_mapper[0]] += 1
-            macros_mapper.append(macros_mapper.popleft())
+            macros_percents[macros_percents_keys[0]] += 1
+            macros_percents_keys.append(macros_percents_keys.popleft())
 
         return int(macros_percents["p"]), int(macros_percents["c"]), int(macros_percents["f"])
 

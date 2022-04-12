@@ -108,7 +108,7 @@ class MacrosPercents(models.Model):
     )
 
     @property
-    def percents(self):
+    def percents(self) -> tuple:
         return self.protein / 100, self.carbs / 100, self.fat / 100
 
     def __str__(self):
@@ -180,9 +180,6 @@ class Goal(models.Model):
 
 
 class DailyNutrients(models.Model, DailyCaloriesCalculatorMixin):
-    class Meta:
-        verbose_name_plural = "Daily nutrients"
-
     profile = models.OneToOneField(
         to=Profile,
         on_delete=models.CASCADE,
@@ -205,6 +202,9 @@ class DailyNutrients(models.Model, DailyCaloriesCalculatorMixin):
     daily_vitamin_c = models.FloatField(default=100)
     daily_calcium = models.FloatField(default=100)
     daily_iron = models.FloatField(default=100)
+
+    class Meta:
+        verbose_name_plural = "Daily nutrients"
 
     def set_daily_nutrients(self) -> None:
         self.__set_calories()

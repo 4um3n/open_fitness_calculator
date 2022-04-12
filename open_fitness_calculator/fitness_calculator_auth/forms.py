@@ -1,12 +1,14 @@
 from django import forms
 from django.contrib.auth import authenticate
 from django.core.exceptions import ValidationError
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, SetPasswordForm
-from open_fitness_calculator.core.forms import FormFieldsController, FitnessCalculatorModelForm
-from open_fitness_calculator.fitness_calculator_auth.models import FitnessCalculatorUser
+
 from django.contrib.auth.password_validation import validate_password
 from open_fitness_calculator.core.validators import validate_password_contain_digits, \
     validate_password_contain_uppercase_letter, validate_password_contain_lowercase_letter, validate_username_isalnum
+
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, SetPasswordForm
+from open_fitness_calculator.core.forms import FormFieldsController, FitnessCalculatorModelForm
+from open_fitness_calculator.fitness_calculator_auth.models import FitnessCalculatorUser
 
 
 class SignUpForm(UserCreationForm, FormFieldsController):
@@ -36,7 +38,7 @@ class SignUpForm(UserCreationForm, FormFieldsController):
 
     def __init__(self, *args, **kwargs):
         super(SignUpForm, self).__init__(*args, **kwargs)
-        FormFieldsController.__init__(self)
+        super(SignUpForm, self).set_up_fields()
 
 
 class SignInForm(AuthenticationForm, FormFieldsController):
@@ -49,7 +51,7 @@ class SignInForm(AuthenticationForm, FormFieldsController):
 
     def __init__(self, *args, **kwargs):
         super(SignInForm, self).__init__(*args, **kwargs)
-        FormFieldsController.__init__(self)
+        super(SignInForm, self).set_up_fields()
 
     def clean(self):
         username = self.cleaned_data.get('username')
@@ -120,4 +122,4 @@ class UpdateUserPasswordForm(SetPasswordForm, FormFieldsController):
 
     def __init__(self, *args, **kwargs):
         super(UpdateUserPasswordForm, self).__init__(*args, **kwargs)
-        FormFieldsController.__init__(self)
+        super(UpdateUserPasswordForm, self).set_up_fields()

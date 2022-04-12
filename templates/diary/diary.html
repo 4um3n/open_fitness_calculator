@@ -18,7 +18,7 @@
                         <label class="food-name diary">
                             {{ meal.food.name }}
                         </label>
-                        <a class="btn delete-food diary" href="{% url "delete food from diary" diary.pk meal.pk %}">
+                        <a class="btn delete-food diary" href="{% url "delete food from diary" meal.pk %}">
                             DELETE
                         </a>
                     </button>
@@ -37,7 +37,7 @@
                     <label class="food-name diary">
                         {{ diary_exercise.exercise.name }}
                     </label>
-                    <a class="btn delete-food diary" href="{% url "delete exercise from diary" diary.pk diary_exercise.pk %}">
+                    <a class="btn delete-food diary" href="{% url "delete exercise from diary" diary_exercise.pk %}">
                         DELETE
                     </a>
                 </button>

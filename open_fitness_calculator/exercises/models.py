@@ -5,13 +5,13 @@ from open_fitness_calculator.profiles.models import Profile
 
 
 class Exercise(models.Model):
-    MINUTE_UNIT_CHOICE = "minute"
-    HOUR_UNIT_CHOICE = "hour"
-    SET_UNIT_CHOICE = "set"
+    MINUTE_UNIT_CHOICE = "minutes"
+    HOUR_UNIT_CHOICE = "hours"
+    SET_UNIT_CHOICE = "sets"
     UNIT_CHOICES = (
-        (MINUTE_UNIT_CHOICE, "minute"),
-        (HOUR_UNIT_CHOICE, "hour"),
-        (SET_UNIT_CHOICE, "set"),
+        (MINUTE_UNIT_CHOICE, "minutes"),
+        (HOUR_UNIT_CHOICE, "hours"),
+        (SET_UNIT_CHOICE, "sets"),
     )
 
     name = models.CharField(
@@ -19,7 +19,7 @@ class Exercise(models.Model):
         unique=True,
     )
     unit = models.CharField(
-        max_length=6,
+        max_length=7,
         choices=UNIT_CHOICES,
     )
     is_admin = models.BooleanField(

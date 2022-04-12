@@ -1,6 +1,6 @@
 from django.urls import path
 
-from open_fitness_calculator.exercises.views import LogExerciseView, UserExerciseView, DiaryExerciseView, \
+from open_fitness_calculator.exercises.views import LogExerciseView, ExerciseView, DiaryExerciseView, \
     DeleteExerciseFromDiaryView, ListAvailableExercisesView, ListUserExercisesView, CreateUserExerciseView, \
     UpdateUserExerciseView, DeleteUserExerciseView, ListCreateExerciseAPIView, DetailUpdateDeleteExerciseAPIView
 
@@ -8,7 +8,7 @@ urlpatterns = [
     path(
         '<int:exercise_pk>/<int:diary_pk>/',
         LogExerciseView.as_view(),
-        name='exercise'
+        name='log exercise'
     ),
     path(
         'diary-exercise/<int:diary_pk>/<int:exercise_pk>/',
@@ -16,7 +16,7 @@ urlpatterns = [
         name='diary exercise'
     ),
     path(
-        'delete-from-diary/<int:diary_pk>/<int:exercise_pk>/',
+        'delete-from-diary/<int:exercise_pk>/',
         DeleteExerciseFromDiaryView.as_view(),
         name='delete exercise from diary'
     ),
@@ -32,8 +32,8 @@ urlpatterns = [
     ),
     path(
         'user-exercise/<int:exercise_pk>/',
-        UserExerciseView.as_view(),
-        name='user exercise'
+        ExerciseView.as_view(),
+        name='exercise'
     ),
     path(
         'create-user-exercise/',
