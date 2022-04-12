@@ -3,6 +3,7 @@ from django.shortcuts import get_object_or_404
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 
+from open_fitness_calculator.core.mixins import RequireSuperuserPermissionsMixin
 from open_fitness_calculator.profiles.models import Profile
 from django.views.generic import UpdateView, RedirectView, FormView
 from open_fitness_calculator.profiles.forms import ProfileForm, GoalForm, StaffForm
@@ -45,7 +46,7 @@ class RequestBecomingStaffView(RedirectView):
 
 
 @method_decorator(login_required, name="dispatch")
-class StaffView(FormView):
+class StaffView(RequireSuperuserPermissionsMixin, FormView):
     form_class = StaffForm
     model = Profile
     pk_url_kwarg = "profile_pk"

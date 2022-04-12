@@ -29,6 +29,16 @@ $ python manage.py runserver
 Then visit `http://localhost:8000` to view the app.
 
 
+
+~~_````````**__**## Tests
+
+To run the tests, `cd` into the directory where `manage.py` is:
+```sh
+(venv) 
+$ python manage.py test
+```**__**````````_~~
+
+
 ## Get involved!
 
 I am happy to receive bug reports, fixes, documentation enhancements,

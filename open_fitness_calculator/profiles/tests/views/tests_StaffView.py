@@ -8,9 +8,11 @@ from open_fitness_calculator.profiles.models import Profile
 
 class StaffViewTests(TestCase):
     __USER_MODEL = get_user_model()
+    __PROFILE_MODEL = Profile
     __VALID_TEMPLATE_NAME = "profile/profile_staff.html"
     __VALID_GET_REQUEST_URL = reverse("staff", kwargs={"profile_pk": 0})
     __VALID_POST_REQUEST_URL = None
+    __VALID_REDIRECT_URL = reverse("home")
     __VALID_FORM_CLASS = StaffForm
     __VALID_ADMIN_USER_CREDENTIALS = {
         "username": "admin ",
@@ -48,7 +50,7 @@ class StaffViewTests(TestCase):
         self.__USER_MODEL.objects.all().delete()
 
     def tests_get__expect_requested_staff_to_not_be_empty(self):
-        Profile.objects.filter(pk=self.regular_user.profile.pk).update(requested_staff=True)
+        self.__PROFILE_MODEL.objects.filter(pk=self.regular_user.profile.pk).update(requested_staff=True)
         response = self.client.get(self.__VALID_GET_REQUEST_URL)
         profiles_requested_staff = response.context_data.get("profiles_requested_staff")
 
@@ -60,21 +62,40 @@ class StaffViewTests(TestCase):
 
         self.__USER_MODEL.objects.all().delete()
 
-    def test_post__when_requested_staff_is_not_empty__expect_success(self):
-        Profile.objects.filter(pk=self.regular_user.profile.pk).update(requested_staff=True)
+    def test_post__when_signed_in_user_is_admin__regular_user_is_not_staff__expect_success(self):
+        self.__PROFILE_MODEL.objects.filter(pk=self.admin_user.pk).update(is_admin=True)
+        self.__PROFILE_MODEL.objects.filter(pk=self.regular_user.profile.pk).update(requested_staff=True)
         self.client.post(self.__VALID_POST_REQUEST_URL)
         self.regular_user.profile.refresh_from_db()
 
         self.assertTrue(self.regular_user.profile.is_staff)
-
         self.__USER_MODEL.objects.all().delete()
 
-    def test_post__when_staff_is_not_empty__expect_success(self):
-        Profile.objects.filter(pk=self.regular_user.profile.pk).update(is_staff=True, requested_staff=True)
+    def test_post__when_signed_in_user_is_not_admin__regular_user_is_not_staff__expect_to_redirect(self):
+        self.__PROFILE_MODEL.objects.filter(pk=self.regular_user.profile.pk).update(requested_staff=True)
+        response = self.client.post(self.__VALID_POST_REQUEST_URL)
+        self.regular_user.profile.refresh_from_db()
+
+        self.assertFalse(self.regular_user.profile.is_staff)
+        self.assertRedirects(response, self.__VALID_REDIRECT_URL)
+        self.__USER_MODEL.objects.all().delete()
+
+    def test_post__when_signed_in_user_is_admin__regular_user_is_staff__expect_success(self):
+        self.__PROFILE_MODEL.objects.filter(pk=self.admin_user.pk).update(is_admin=True)
+        self.__PROFILE_MODEL.objects.filter(pk=self.regular_user.profile.pk).update(is_staff=True, requested_staff=True)
         self.client.post(self.__VALID_POST_REQUEST_URL)
         self.regular_user.profile.refresh_from_db()
 
         self.assertFalse(self.regular_user.profile.is_staff)
         self.assertTrue(self.regular_user.profile.requested_staff)
 
+        self.__USER_MODEL.objects.all().delete()
+
+    def test_post__when_signed_in_user_is_not_admin__regular_user_is_staff__expect_to_redirect(self):
+        self.__PROFILE_MODEL.objects.filter(pk=self.regular_user.profile.pk).update(is_staff=True, requested_staff=True)
+        response = self.client.post(self.__VALID_POST_REQUEST_URL)
+        self.regular_user.profile.refresh_from_db()
+
+        self.assertTrue(self.regular_user.profile.is_staff)
+        self.assertRedirects(response, self.__VALID_REDIRECT_URL)
         self.__USER_MODEL.objects.all().delete()

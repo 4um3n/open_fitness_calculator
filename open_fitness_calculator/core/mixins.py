@@ -2,8 +2,17 @@ import os
 from collections import deque
 
 import requests
+from django.shortcuts import redirect
 from matplotlib import pyplot as plt
 from open_fitness_calculator.settings import BASE_DIR
+
+
+class RequireSuperuserPermissionsMixin:
+    def dispatch(self, request, *args, **kwargs):
+        if request.method == "POST" and not request.user.profile.is_admin:
+            return redirect("home")
+
+        return super(RequireSuperuserPermissionsMixin, self).dispatch(request, *args, **kwargs)
 
 
 class FoodMacrosConvertorMixin:

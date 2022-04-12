@@ -13,7 +13,8 @@ def user_post_save__create_profile(sender, instance, *args, **kwargs):
 
         if instance.is_staff:
             kwargs.update({"is_staff": True})
-        elif instance.is_superuser:
+
+        if instance.is_superuser:
             kwargs.update({"is_admin": True})
 
         Profile.objects.create(**kwargs).save()
