@@ -1,7 +1,7 @@
 # OpenFitnessCalculator Django App
 
 This is OpenFitnessCalculator Django app that uses
-[OpenFoodRepoApi](https://www.foodrepo.org/api-docs/swaggers/v3#/) to search food. 
+[OpenFoodRepoApi](https://www.foodrepo.org/api-docs/swaggers/v3#/) to search for food. 
 
 **This project is written with Django 4.0 => 
 [OpenFitnessCalculator](https://github.com/4um3n/open_fitness_calculator).**
