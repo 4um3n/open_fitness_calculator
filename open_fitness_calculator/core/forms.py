@@ -19,28 +19,33 @@ class FormFieldsController:
             self.__disable_fields()
 
         if self.class_name is not None:
-            self._add_class_name_to_all_fields()
+            self.__add_class_name_to_all_fields()
 
-        self._add_fields_classes()
-        self._add_placeholders()
+        self.__add_fields_classes()
+        self.__add_placeholders()
         self.__remove_labels()
         self.__add_validators()
         self.__add_widgets_attrs()
 
-    def _add_class_name_to_all_fields(self):
+    def __add_class_name_to_all_fields(self):
         for field_name, field in self.fields.items():
             if field_name not in self.classes_excluded:
                 if "class" not in field.widget.attrs:
                     field.widget.attrs["class"] = ""
+
                 field.widget.attrs["class"] += f" {self.class_name} "
 
-    def _add_fields_classes(self):
+    def __add_fields_classes(self):
         for field, class_name in self.more_classes.items():
+            if not self.fields.get(field):
+                continue
+
             if "class" not in self.fields[field].widget.attrs:
                 self.fields[field].widget.attrs["class"] = ""
+
             self.fields[field].widget.attrs["class"] += f" {class_name}"
 
-    def _add_placeholders(self):
+    def __add_placeholders(self):
         for field, placeholder_name in self.placeholders.items():
             self.fields[field].widget.attrs["placeholder"] = placeholder_name
 
@@ -53,8 +58,12 @@ class FormFieldsController:
                 field.validators.extend(self.validators)
 
         for field, validators in self.more_validators.items():
+            if not self.fields.get(field):
+                continue
+
             if not self.fields[field].validators:
                 self.fields[field].validators = []
+
             self.fields[field].validators.extend(validators)
 
     def __remove_labels(self):
@@ -70,6 +79,9 @@ class FormFieldsController:
 
     def __add_widgets_attrs(self):
         for field, attrs in self.widgets_attrs.items():
+            if not self.fields.get(field):
+                continue
+
             if not getattr(self.fields[field].widget, "attrs"):
                 self.fields[field].widget.attrs = {}
 

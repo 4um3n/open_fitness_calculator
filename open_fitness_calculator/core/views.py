@@ -13,11 +13,11 @@ from open_fitness_calculator.core.mixins import SearchOpenFoodMixin
 
 @method_decorator(login_required, name="dispatch")
 class HomeView(ListView, FormView, SearchOpenFoodMixin):
+    paginate_by = 6
+    object_list = []
     form_class = SearchFoodForm
     template_name = "core/home.html"
     success_url = reverse_lazy("home")
-    paginate_by = 6
-    object_list = []
 
     def get_food(self):
         return self.kwargs.get("food") or \

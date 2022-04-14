@@ -2,6 +2,7 @@ import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
+import cloudinary
 from django.urls import reverse_lazy
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -23,7 +24,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'djoser',
+    "djoser",
+    "cloudinary",
     "rest_framework",
     'rest_framework.authtoken',
     "open_fitness_calculator.fitness_calculator_auth",
@@ -114,16 +116,26 @@ USE_I18N = True
 
 USE_TZ = True
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+STATIC_ROOT = "/tmp/staticfiles"
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static")
 ]
 
-MEDIA_URL = "media/"
+MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+
+cloudinary.config(
+  cloud_name=os.environ.get("CLOUDINARY_CLOUD_NAME"),
+  api_key=os.environ.get("CLOUDINARY_API_KEY"),
+  api_secret=os.environ.get("CLOUDINARY_API_SECRET")
+)
+
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 AUTH_USER_MODEL = "fitness_calculator_auth.FitnessCalculatorUser"
 
 LOGIN_URL = reverse_lazy("sign in")
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+

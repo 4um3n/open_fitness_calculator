@@ -64,7 +64,6 @@
     flex-wrap: nowrap;
     align-items: center;
     box-shadow: 0 2px 7px -3px  rgba(0, 0, 0, 1);
-    /*background: var(--green-background-gradient);*/
     margin: 10px auto;
     padding: 3px;
     border-radius: 200px;
@@ -90,7 +89,6 @@
     align-items: center;
     justify-content: center;
     margin: 0 21px;
-    /*color: rgba(255, 255, 255, 1);*/
 }
 
 .greeting.profile h1 {

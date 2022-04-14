@@ -1,9 +1,13 @@
+import os
+
 from django.db import models
+from cloudinary import uploader
+from cloudinary import models as cloudinary_models
 from django.core.validators import MinValueValidator
 
 from open_fitness_calculator.diary.models import Diary
 from open_fitness_calculator.profiles.models import Profile
-from open_fitness_calculator.core.mixins import FoodPieChartMixin, FoodMacrosConvertorMixin
+from open_fitness_calculator.core.mixins import BaseFoodPieChartMixin, FoodMacrosConvertorMixin
 from open_fitness_calculator.fitness_calculator_auth.models import FitnessCalculatorUser
 
 
@@ -63,94 +67,24 @@ class Food(models.Model, FoodMacrosConvertorMixin):
         null=True,
         blank=True,
     )
-    is_admin = models.BooleanField(
-        default=False,
-    )
-    energy = models.IntegerField(
-        default=0,
-        null=True,
-        blank=True,
-    )
-    protein = models.FloatField(
-        default=0,
-        null=True,
-        blank=True,
-    )
-    carbs = models.FloatField(
-        default=0,
-        null=True,
-        blank=True,
-    )
-    fiber = models.FloatField(
-        default=0,
-        null=True,
-        blank=True,
-    )
-    sugars = models.FloatField(
-        default=0,
-        null=True,
-        blank=True,
-    )
-    fat = models.FloatField(
-        default=0,
-        null=True,
-        blank=True,
-    )
-    saturated_fat = models.FloatField(
-        default=0,
-        null=True,
-        blank=True,
-    )
-    polyunsaturated_fat = models.FloatField(
-        default=0,
-        null=True,
-        blank=True,
-    )
-    monounsaturated_fat = models.FloatField(
-        default=0,
-        null=True,
-        blank=True,
-    )
-    trans_fat = models.FloatField(
-        default=0,
-        null=True,
-        blank=True,
-    )
-    cholesterol = models.FloatField(
-        default=0,
-        null=True,
-        blank=True,
-    )
-    sodium = models.FloatField(
-        null=True,
-        default=0,
-        blank=True,
-    )
-    potassium = models.FloatField(
-        default=0,
-        null=True,
-        blank=True,
-    )
-    calcium = models.FloatField(
-        default=0,
-        null=True,
-        blank=True,
-    )
-    iron = models.FloatField(
-        default=0,
-        null=True,
-        blank=True,
-    )
-    vitamin_a = models.FloatField(
-        default=0,
-        null=True,
-        blank=True,
-    )
-    vitamin_c = models.FloatField(
-        default=0,
-        null=True,
-        blank=True,
-    )
+    is_admin = models.BooleanField(default=False)
+    energy = models.IntegerField(default=0)
+    protein = models.FloatField(default=0)
+    carbs = models.FloatField(default=0)
+    fiber = models.FloatField(default=0)
+    sugars = models.FloatField(default=0)
+    fat = models.FloatField(default=0)
+    saturated_fat = models.FloatField(default=0)
+    polyunsaturated_fat = models.FloatField(default=0)
+    monounsaturated_fat = models.FloatField(default=0)
+    trans_fat = models.FloatField(default=0)
+    cholesterol = models.FloatField(default=0)
+    sodium = models.FloatField(default=0)
+    potassium = models.FloatField(default=0)
+    calcium = models.FloatField(default=0)
+    iron = models.FloatField(default=0)
+    vitamin_a = models.FloatField(default=0)
+    vitamin_c = models.FloatField(default=0)
     profile = models.ForeignKey(
         to=Profile,
         on_delete=models.SET_NULL,
@@ -162,22 +96,39 @@ class Food(models.Model, FoodMacrosConvertorMixin):
         verbose_name_plural = "Food"
 
     def __str__(self):
-        return f"{self.name}"
+        return f"{self.name}_{self.pk}"
 
 
-class FoodPieChart(models.Model, FoodPieChartMixin):
-    image = models.ImageField(
-        default="images/food/default/default.png"
-    )
-
+class FoodPieChart(models.Model, BaseFoodPieChartMixin):
     food = models.OneToOneField(
         to=Food,
         on_delete=models.CASCADE,
     )
 
+    image = cloudinary_models.CloudinaryField(
+        "Image",
+        overwrite=True,
+        resource_type="image",
+        transformation={"quality": "auto:eco"},
+        format="png",
+    )
+
     @property
     def name(self):
         return self.food.name
+
+    @classmethod
+    def __reset_image(cls, pk, new_image):
+        cls.objects.filter(pk=pk).update(image=new_image)
+
+    def reset_pie_chart(self):
+        self.create_pie_chart()
+        new_pie_chart = self._upload_new_pie_chart()
+        self.__reset_image(self.pk, new_pie_chart)
+        self._delete_unused_local_pie_chart()
+
+    def delete_cloudinary_pie_chart(self):
+        self._delete_unused_cloudinary_pie_chart()
 
     def __str__(self):
         return f"{self.name}"

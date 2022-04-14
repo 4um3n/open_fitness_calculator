@@ -1,9 +1,11 @@
 from django.db import models
-from django.core.validators import MinValueValidator, MaxValueValidator
+from cloudinary import uploader
+from cloudinary import models as cloudinary_models
+from open_fitness_calculator.core.validators import validate_username_isalnum
 
+from django.core.validators import MinValueValidator, MaxValueValidator
 from open_fitness_calculator.core.mixins import DailyCaloriesCalculatorMixin
 from open_fitness_calculator.fitness_calculator_auth.models import FitnessCalculatorUser
-from open_fitness_calculator.core.validators import validate_username_isalnum
 
 
 class Profile(models.Model):
@@ -24,10 +26,6 @@ class Profile(models.Model):
         default=False,
     )
 
-    profile_picture = models.ImageField(
-        upload_to="images/profile_pictures",
-        default="images/profile_pictures/default/default.png",
-    )
     first_name = models.CharField(
         max_length=30,
         blank=True,
@@ -75,6 +73,31 @@ class Profile(models.Model):
         on_delete=models.CASCADE,
         primary_key=True,
     )
+
+    profile_picture = cloudinary_models.CloudinaryField(
+        "Image",
+        overwrite=True,
+        resource_type="image",
+        transformation={"quality": "auto:eco"},
+        format="png",
+        blank=True,
+    )
+
+    @property
+    def cloudinary_dir_path(self):
+        return f"images/profile_pictures/"
+
+    def upload_new_profile_picture(self, new_image):
+        return uploader.upload_resource(
+            new_image,
+            use_filename=True,
+            unique_filename=False,
+            filename_override=self.user.username,
+            folder=self.cloudinary_dir_path,
+        )
+
+    def delete_profile_picture(self):
+        uploader.destroy(f"{self.cloudinary_dir_path}{self.user.username}")
 
     def request_becoming_staff(self):
         self.requested_staff = True

@@ -1,11 +1,14 @@
+from cloudinary import uploader, CloudinaryResource
+from django.contrib.auth import get_user
+from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.shortcuts import get_object_or_404
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 
-from open_fitness_calculator.core.mixins import RequireSuperuserPermissionsMixin
 from open_fitness_calculator.profiles.models import Profile
 from django.views.generic import UpdateView, RedirectView, FormView
+from open_fitness_calculator.core.mixins import RequireSuperuserPermissionsMixin
 from open_fitness_calculator.profiles.forms import ProfileForm, GoalForm, StaffForm
 
 
@@ -22,16 +25,17 @@ class ProfileUpdateView(UpdateView):
 
     def get_context_data(self, **kwargs):
         profile = self.get_object()
-        self.extra_context = {"goals_form": GoalForm(initial=profile.goal.__dict__)}
+        self.extra_context = {
+            "profile": profile,
+            "goals_form": GoalForm(initial=profile.goal.__dict__),
+        }
         return super(ProfileUpdateView, self).get_context_data(**kwargs)
 
     def post(self, request, *args, **kwargs):
         goal_form = GoalForm(request.POST, instance=self.get_object().goal)
-
         if goal_form.is_valid():
             goal_form.save()
             return super(ProfileUpdateView, self).post(request, *args, **kwargs)
-
         return super(ProfileUpdateView, self).form_invalid(goal_form)
 
 

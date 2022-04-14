@@ -1,19 +1,18 @@
-import os
+import os.path
 from django.dispatch import receiver
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models.signals import post_save, pre_delete, pre_save
 
+from open_fitness_calculator.settings import BASE_DIR
 from open_fitness_calculator.diary.models import Diary
 from open_fitness_calculator.profiles.models import MacrosPercents, Goal, Profile, DailyNutrients
 
 
 @receiver(pre_save, sender=Profile)
-def profile_pre_save__delete_profile_picture(sender, instance, *args, **kwargs):
-    if sender.objects.filter(pk=instance.pk).exists():
-        old_picture_path = instance.profile_picture.path
-
-        if old_picture_path.split(os.sep)[-2] != "default" and old_picture_path != instance.profile_picture.path:
-            instance.profile_picture.delete(save=False)
+def profile_pre_save__upload_default_profile_picture(sender, instance, *args, **kwargs):
+    if not sender.objects.filter(pk=instance.pk).exists():
+        profile_picture_path = os.path.join(BASE_DIR, "media", "images", "profile_pictures", "default", "default.png")
+        instance.profile_picture = instance.upload_new_profile_picture(profile_picture_path)
 
 
 @receiver(post_save, sender=Profile)
@@ -37,7 +36,7 @@ def profile_post_save(sender, instance, *args, **kwargs):
 
 
 @receiver(pre_delete, sender=Profile)
-def profile_pre_delete__delete_profile_picture(sender, instance, *args, **kwargs):
+def profile_pre_delete__delete_non_admin_food_and_exercises(sender, instance, *args, **kwargs):
     for food in instance.food_set.all():
         if not food.is_admin:
             food.delete()
@@ -46,8 +45,10 @@ def profile_pre_delete__delete_profile_picture(sender, instance, *args, **kwargs
         if not exercise.is_admin:
             exercise.delete()
 
-    if instance.profile_picture.path.split(os.sep)[-2] != "default":
-        instance.profile_picture.delete(save=False)
+
+@receiver(pre_delete, sender=Profile)
+def profile_pre_delete__delete_profile_picture(sender, instance, *args, **kwargs):
+    instance.delete_profile_picture()
 
 
 @receiver(post_save, sender=MacrosPercents)

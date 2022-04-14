@@ -63,7 +63,7 @@ html.auth {
 }
 
 body.auth {
-    background-image: url("/media/images/static/auth-background.png");
+    background-image: url("/static/static/auth-background.png");
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -92,7 +92,6 @@ body.auth {
     box-sizing: border-box;
     color: rgba(54, 50, 65, 1);
     border: none;
-    /*border: 1px solid rgba(0, 0, 0, 0.25);*/
     box-shadow: 0 2px 7px -3px rgba(0, 0, 0, 1);
     border-radius: 4px;
     margin: 5px 0;
@@ -103,7 +102,6 @@ body.auth {
 .form-control.auth:focus {
     outline: 0;
     box-shadow: 0 3px 7px -3px rgba(0, 0, 0, 1);
-    /*box-shadow: 0 0 0 0.10rem rgba(0, 76, 120, 1);*/
 }
 
 .nav-wrapper.auth {

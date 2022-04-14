@@ -1,9 +1,9 @@
 import os
-from collections import deque
-
 import requests
-from django.shortcuts import redirect
+from collections import deque
+from cloudinary import uploader
 from matplotlib import pyplot as plt
+from django.shortcuts import redirect
 from open_fitness_calculator.settings import BASE_DIR
 
 
@@ -72,8 +72,7 @@ class DailyCaloriesCalculatorMixin:
 
     @property
     def macros_percents(self):
-        if self.profile is not None:
-            return self.profile.macrospercents.percents
+        return self.profile.macrospercents.percents
 
     def _calculate_daily_calories(self):
         """
@@ -102,11 +101,11 @@ class DailyCaloriesCalculatorMixin:
 
 
 class PieChartCreationMixin:
-    full_file_path = None
     sizes = None
+    full_file_path = None
 
     def create_pie_chart(self):
-        save_path, sizes = self.full_file_path, self.sizes()
+        save_path, sizes = self.full_file_path, self.sizes
         plt.rcParams["figure.figsize"] = (2.5, 2.5)
         colors = "#017250FF", "#FF8000FF", "#FF0062FF", "#004378FF"
 
@@ -116,7 +115,6 @@ class PieChartCreationMixin:
             colors = ["#707070FF"]
 
         explode = [0.1 for _ in range(len(sizes))]
-
         fig1, ax1 = plt.subplots()
         ax1.pie(sizes, colors=colors, explode=explode, startangle=90)
         plt.savefig(save_path, transparent=True)
@@ -124,54 +122,88 @@ class PieChartCreationMixin:
 
 class BasePieChartMixin(PieChartCreationMixin):
     pk = None
-    name = None
-    image = None
+    name = ""
+    image = ""
     objects = None
-    images_directory = None
+    CLOUDINARY_DIR_PATH = ""
+    LOCAL_IMAGES_DIR_NAME = ""
 
     @property
     def file_name(self):
-        return f"{self.pk}_{self.name}.png"
+        return f"{self.name}_{self.pk}.png"
 
     @property
     def file_path(self):
-        return os.path.join("images", f"{self.images_directory}", self.file_name)
-
-    @property
-    def default_file_path(self):
-        return os.path.join("images", f"{self.images_directory}", "default/default.png")
+        return os.path.join("images", f"{self.LOCAL_IMAGES_DIR_NAME}", self.file_name)
 
     @property
     def full_file_path(self):
-        return os.path.join(BASE_DIR, "media", "images", f"{self.images_directory}", self.file_name)
+        return os.path.join(BASE_DIR, "media", f"{self.file_path}")
+
+    @property
+    def default_file_path(self):
+        return os.path.join("images", f"{self.LOCAL_IMAGES_DIR_NAME}", "default/default.png")
+
+    @property
+    def default_full_file_path(self):
+        return os.path.join(BASE_DIR, "media", f"{self.default_file_path}")
+
+    @property
+    def cloudinary_image_file_name(self):
+        return self.file_name.split(".")[0]
+
+    @property
+    def cloudinary_image_file_path(self):
+        return f"{self.CLOUDINARY_DIR_PATH}{self.cloudinary_image_file_name}"
 
     def get_file_path(self):
-        if not os.path.isfile(self.full_file_path):
-            return self.default_file_path
+        if os.path.isfile(self.full_file_path):
+            return self.full_file_path
+        return self.default_full_file_path
 
-        return self.file_path
+    def _upload_new_pie_chart(self):
+        return uploader.upload_resource(
+            self.get_file_path(),
+            use_filename=True,
+            unique_filename=False,
+            filename_override=self.cloudinary_image_file_name,
+            folder=self.CLOUDINARY_DIR_PATH,
+        )
+
+    def _delete_unused_local_pie_chart(self):
+        if self.get_file_path().split(os.sep)[-2] != "default":
+            os.remove(self.get_file_path())
+
+    def _delete_unused_cloudinary_pie_chart(self):
+        uploader.destroy(self.cloudinary_image_file_path)
 
 
-class FoodPieChartMixin(BasePieChartMixin):
+class BaseFoodPieChartMixin(BasePieChartMixin):
     food = None
-    images_directory = f"food"
+    LOCAL_IMAGES_DIR_NAME = f"food"
+    CLOUDINARY_DIR_PATH = "images/food/"
 
+    @property
     def sizes(self):
-        return self.food.get_percents_form_macros()
+        return [int(value) for value in self.food.get_percents_form_macros()]
 
 
-class DiaryCaloriesPieChartMixin(BasePieChartMixin):
+class BaseDiaryCaloriesPieChartMixin(BasePieChartMixin):
     diary = None
-    images_directory = f"diary_calories"
+    LOCAL_IMAGES_DIR_NAME = f"diary_calories"
+    CLOUDINARY_DIR_PATH = "images/diary_calories/"
 
+    @property
     def sizes(self):
         return self.diary.get_meals_calories_percents()
 
 
-class DiaryMacrosPieChartMixin(BasePieChartMixin):
+class BaseDiaryMacrosPieChartMixin(BasePieChartMixin):
     diary = None
-    images_directory = f"diary_macros"
+    LOCAL_IMAGES_DIR_NAME = f"diary_macros"
+    CLOUDINARY_DIR_PATH = "images/diary_macros/"
 
+    @property
     def sizes(self):
         return self.diary.get_meals_macros_percents()
 
@@ -192,6 +224,7 @@ class BaseOpenFoodRepoMixin:
         "iron": "iron",
         "calcium": "calcium",
         "sodium": "sodium",
+        "potassium": "potassium",
         "vitamin_c_ascorbic_acid": "vitamin_c",
         "vitamin_a_iu": "vitamin_a",
     }
@@ -216,14 +249,18 @@ class BaseOpenFoodRepoMixin:
         nutrients = food_data.get("nutrients") or {}
 
         food_cleaned_data = {
-            "name": name.get("en") if name is not None else "" or "",
-            "ingredients": ingredients.get("en") if ingredients is not None else "" or "",
+            "name": name.get("en") or "" if name is not None else "",
+            "ingredients": ingredients.get("en") or "" if ingredients is not None else "",
         }
 
         for key, value in nutrients.items():
             if key in self.NUTRIENTS_NAMES_MAPPER:
                 food_cleaned_data[self.NUTRIENTS_NAMES_MAPPER[key]] = value.get("per_hundred") \
                     if value is not None else 0 or 0
+
+        for key in self.NUTRIENTS_NAMES_MAPPER.values():
+            if key not in food_cleaned_data:
+                food_cleaned_data[key] = 0
 
         return food_cleaned_data
 

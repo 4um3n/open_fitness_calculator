@@ -1,9 +1,8 @@
 import datetime
-from collections import deque
-
 from django.db import models
+from cloudinary import models as cloudinary_models
 from open_fitness_calculator.profiles.models import Profile
-from open_fitness_calculator.core.mixins import DiaryMacrosPieChartMixin, DiaryCaloriesPieChartMixin
+from open_fitness_calculator.core.mixins import BaseDiaryMacrosPieChartMixin, BaseDiaryCaloriesPieChartMixin
 
 
 class Diary(models.Model):
@@ -180,20 +179,11 @@ class Diary(models.Model):
         carbs *= 4
         fat *= 9
 
-        macros_percents_keys = deque(["p", "c", "f"])
         macros_percents = {
             "p": int(protein / cals * 100) if protein else 0,
             "c": int(carbs / cals * 100) if carbs else 0,
             "f": int(fat / cals * 100) if fat else 0,
         }
-
-        while macros_percents["p"] + macros_percents["c"] + macros_percents["f"] > 100:
-            macros_percents[macros_percents_keys[0]] -= 1
-            macros_percents_keys.append(macros_percents_keys.popleft())
-
-        while macros_percents["p"] + macros_percents["c"] + macros_percents["f"] < 100:
-            macros_percents[macros_percents_keys[0]] += 1
-            macros_percents_keys.append(macros_percents_keys.popleft())
 
         return int(macros_percents["p"]), int(macros_percents["c"]), int(macros_percents["f"])
 
@@ -201,37 +191,71 @@ class Diary(models.Model):
         return f"{self.name}"
 
 
-class CaloriesPieChart(models.Model, DiaryCaloriesPieChartMixin):
-    image = models.ImageField(
-        default="images/diary_calories/default/default.png"
-    )
-
+class CaloriesPieChart(models.Model, BaseDiaryCaloriesPieChartMixin):
     diary = models.OneToOneField(
         to=Diary,
         on_delete=models.CASCADE,
     )
 
+    image = cloudinary_models.CloudinaryField(
+        "Image",
+        overwrite=True,
+        resource_type="image",
+        transformation={"quality": "auto:eco"},
+        format="png",
+    )
+
     @property
     def name(self):
         return self.diary.pk
+
+    @classmethod
+    def __reset_image(cls, pk, new_image):
+        cls.objects.filter(pk=pk).update(image=new_image)
+
+    def reset_pie_chart(self):
+        self.create_pie_chart()
+        new_pie_chart = self._upload_new_pie_chart()
+        self.__reset_image(self.pk, new_pie_chart)
+        self._delete_unused_local_pie_chart()
+
+    def delete_cloudinary_pie_chart(self):
+        self._delete_unused_cloudinary_pie_chart()
 
     def __str__(self):
         return f"{self.diary}"
 
 
-class MacrosPieChart(models.Model, DiaryMacrosPieChartMixin):
-    image = models.ImageField(
-        default="images/diary_macros/default/default.png"
-    )
-
+class MacrosPieChart(models.Model, BaseDiaryMacrosPieChartMixin):
     diary = models.OneToOneField(
         to=Diary,
         on_delete=models.CASCADE,
     )
 
+    image = cloudinary_models.CloudinaryField(
+        "Image",
+        overwrite=True,
+        resource_type="image",
+        transformation={"quality": "auto:eco"},
+        format="png",
+    )
+
     @property
     def name(self):
         return self.diary.pk
+
+    @classmethod
+    def __reset_image(cls, pk, new_image):
+        cls.objects.filter(pk=pk).update(image=new_image)
+
+    def reset_pie_chart(self):
+        self.create_pie_chart()
+        new_pie_chart = self._upload_new_pie_chart()
+        self.__reset_image(self.pk, new_pie_chart)
+        self._delete_unused_local_pie_chart()
+
+    def delete_cloudinary_pie_chart(self):
+        self._delete_unused_cloudinary_pie_chart()
 
     def __str__(self):
         return f"{self.diary}"

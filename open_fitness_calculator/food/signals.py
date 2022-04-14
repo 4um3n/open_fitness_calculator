@@ -1,37 +1,37 @@
-import os
 from django.dispatch import receiver
-from django.db.models.signals import post_save, pre_delete, post_delete, pre_save
+from django.db.models.signals import post_save, pre_delete, post_delete
+
 from open_fitness_calculator.food.models import Food, DiaryFood, FoodPieChart
-
-
-@receiver(pre_save, sender=Food)
-def food_pre_save__set_food_pie_chart(sender, instance, *args, **kwargs):
-    if sender.objects.filter(pk=instance.pk).exists():
-        instance.foodpiechart.create_pie_chart()
-        file_path = instance.foodpiechart.get_file_path()
-        FoodPieChart.objects.filter(pk=instance.foodpiechart.pk).update(image=file_path)
 
 
 @receiver(post_save, sender=Food)
 def food_post_save__create_food_pie_chart(sender, instance, *args, **kwargs):
     if not hasattr(instance, "foodpiechart"):
-        food_pie_chart = FoodPieChart.objects.create(food=instance)
-        food_pie_chart.save()
-        instance.save()
+        FoodPieChart.objects.create(food=instance).save()
+
+    instance.foodpiechart.reset_pie_chart()
+
+
+@receiver(post_save, sender=Food)
+def food_post_save__create_food_pie_chart(sender, instance, *args, **kwargs):
+    for diary_food in instance.diaryfood_set.all():
+        diary_food.diary.caloriespiechart.reset_pie_chart()
+        diary_food.diary.macrospiechart.reset_pie_chart()
 
 
 @receiver(pre_delete, sender=Food)
-def food_pre_delete__delete_food_pie_chart_image(sender, instance, *args, **kwargs):
-    if instance.foodpiechart.image.path.split(os.sep)[-2] != "default":
-        instance.foodpiechart.image.delete(save=False)
+def food_pre_delete__delete_foodpiechart_image(sender, instance, *args, **kwargs):
+    if hasattr(instance, "foodpiechart"):
+        instance.foodpiechart.delete_cloudinary_pie_chart()
 
 
 @receiver(post_save, sender=DiaryFood)
-def diary_food_pre_save__recreate_and_set_diary_pie_chart(sender, instance, *args, **kwargs):
-    instance.diary.save()
+def diary_food_pre_save__reset_diary_pie_charts(sender, instance, *args, **kwargs):
+    instance.diary.caloriespiechart.reset_pie_chart()
+    instance.diary.macrospiechart.reset_pie_chart()
 
 
 @receiver(post_delete, sender=DiaryFood)
-def diary_food_post_delete__recreate_and_set_diary_pie_chart(sender, instance, *args, **kwargs):
-    instance.diary.save()
-
+def diary_food_post_delete__reset_diary_pie_charts(sender, instance, *args, **kwargs):
+    instance.diary.caloriespiechart.reset_pie_chart()
+    instance.diary.macrospiechart.reset_pie_chart()

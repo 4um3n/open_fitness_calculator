@@ -1,3 +1,5 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en" class="auth">
 <head>
@@ -5,7 +7,7 @@
     {% block title %}
         <title></title>
     {% endblock %}
-    <link rel="stylesheet" href="/static/core/css/styles.css">
+    <link type="text/css" rel="stylesheet" href={% static "core/css/styles.css" %}>
     <script src="https://kit.fontawesome.com/a866a01a60.js" crossorigin="anonymous"></script>
 </head>
 <body class="auth">

@@ -154,7 +154,6 @@ a.dropdown-item:hover {
 }
 
 
-/* Buttons */
 .btn-primary {
     font-family: Sony, sans-serif;
     display: inline-block;
@@ -221,31 +220,24 @@ a.dropdown-item:hover {
 }
 
 
-/*  Scrollbar  */
-/* width and height */
 ::-webkit-scrollbar {
     height: 2px;
     width: 2px;
 }
 
-/* Track */
 ::-webkit-scrollbar-track {
-    /*background: rgba(255, 255, 255, 1);*/
     border-radius: 5px;
 }
 
-/* Handle */
 ::-webkit-scrollbar-thumb {
     background: rgba(0, 0, 0, 1);
     border-radius: 5px;
 }
 
-/* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
     background: rgba(190, 190, 190, 1);
 }
 
-/*  Bottom corner  */
 ::-webkit-scrollbar-corner {
     background: rgba(0, 0, 0, 1);
 }

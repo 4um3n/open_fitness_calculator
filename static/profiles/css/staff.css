@@ -42,7 +42,6 @@
 }
 
 
-/* Create a custom checkbox */
 .staff-name-wrapper .checkmark {
     position: absolute;
     top: 4px;
@@ -50,37 +49,29 @@
     height: 21px;
     width: 21px;
     box-sizing: border-box;
-    /*background-color: rgba(255, 255, 255, 1);*/
-    /*border: 1px solid rgba(40, 124, 102, 1);*/
     box-shadow: 0 2px 7px -3px rgba(0, 0, 0, 1);
     border-radius: 5px;
 }
 
-/* On mouse-over, add a grey background color */
 .staff-name-wrapper:hover .is-staff-checkbox ~ .checkmark {
     box-shadow: 0 2px 7px -3px rgba(0, 0, 0, 1);
-    /*background-color: #ccc;*/
 }
 
-/* When the checkbox is checked, add a blue background */
 .staff-name-wrapper .is-staff-checkbox:checked ~ .checkmark {
     background-color: rgba(0, 156, 244, 1);
     border: none;
 }
 
-/* Create the checkmark/indicator (hidden when not checked) */
 .checkmark:after {
     content: "";
     position: absolute;
     display: none;
 }
 
-/* Show the checkmark when checked */
 .staff-name-wrapper .is-staff-checkbox:checked ~ .checkmark:after {
     display: block;
 }
 
-/* Style the checkmark/indicator */
 .staff-name-wrapper .checkmark:after {
     left: 7px;
     top: 4px;

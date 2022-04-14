@@ -14,7 +14,6 @@
     font-size: 40px;
 }
 
-/*Added Food button*/
 .btn.added-food.diary {
     display: flex;
     justify-content: space-between;
@@ -35,7 +34,6 @@
 }
 
 
-/*Labels inside Added Food button*/
 .food-name.diary {
     white-space: nowrap;
     font-size: 21px;

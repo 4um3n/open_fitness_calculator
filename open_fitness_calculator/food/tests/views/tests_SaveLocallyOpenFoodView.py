@@ -11,6 +11,7 @@ class SaveLocallyOpenFoodViewTests(TestCase):
     __VALID_TEMPLATE_NAME = "food/save_open_food.html"
     __VALID_FOOD_PK = 279649
     __VALID_URL = reverse("save locally open food", kwargs={"food_pk": __VALID_FOOD_PK})
+    __FOOD_DATA_NOT_NUMBER_FIELDS = ("name", "ingredients")
 
     __VALID_USER_CREDENTIALS = {
         "username": "test",
@@ -24,12 +25,12 @@ class SaveLocallyOpenFoodViewTests(TestCase):
         self.client.login(**self.__VALID_USER_CREDENTIALS)
         self.get_open_food_service = GetOpenFoodMixin()
         self.food_macros_convertor_service = FoodMacrosConvertorMixin()
-        
+
     def test_get__expect_correct_template_used(self):
         response = self.client.get(self.__VALID_URL)
         self.assertTemplateUsed(response, self.__VALID_TEMPLATE_NAME)
         self.__MODEL.objects.all().delete()
-    
+
     def test_get__expect_correct_context(self):
         expected_context = self.get_open_food_service.get_food_by_id(self.__VALID_FOOD_PK)
         response = self.client.get(self.__VALID_URL)
@@ -54,7 +55,6 @@ class SaveLocallyOpenFoodViewTests(TestCase):
 
     def test_post__when_successful__expect_to_redirect(self):
         request_data = self.get_open_food_service.get_food_by_id(self.__VALID_FOOD_PK)
-        request_data = {k: v or "" for k, v in request_data.items()}
         response = self.client.post(self.__VALID_URL, data=request_data)
 
         food = self.user.profile.food_set.reverse()[0]
@@ -67,7 +67,6 @@ class SaveLocallyOpenFoodViewTests(TestCase):
     def test_post__when_food_name_exists_in_user_food__expect_ValidationError(self):
         Food.objects.create(name="kiwi", profile=self.user.profile)
         request_data = self.get_open_food_service.get_food_by_id(self.__VALID_FOOD_PK)
-        request_data = {k: v or "" for k, v in request_data.items()}
         response = self.client.post(self.__VALID_URL, data=request_data)
         expected_errors = "Food with that name already exists"
 

@@ -1,3 +1,5 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -10,12 +12,12 @@
         <title>Main</title>
     {% endblock %}
     <!-- Favicon-->
-    <link rel="icon" type="image/x-icon" href="/static/core/bootstrap/assets/favicon.ico"/>
+    <link rel="icon" type="image/x-icon" href={% static "core/bootstrap/assets/favicon.ico" %}/>
     <!-- Core theme CSS (includes Bootstrap)-->
-    <link href="/static/core/bootstrap/css/styles.css" rel="stylesheet"/>
+    <link type="text/css" href={% static "core/bootstrap/css/styles.css" %} rel="stylesheet"/>
     <script src="https://kit.fontawesome.com/a866a01a60.js" crossorigin="anonymous"></script>
 
-    <link rel="stylesheet" href="/static/core/css/styles.css">
+    <link type="text/css" rel="stylesheet" href={% static "core/css/styles.css" %}>
 
 </head>
 
