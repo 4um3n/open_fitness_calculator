@@ -70,13 +70,4 @@ class FoodViewTests(TestCase):
         self.assertRedirects(response, self.__VALID_REDIRECT_URL)
         self.__MODEL.objects.all().delete()
         self.__FOOD_MODEL.objects.all().delete()
-        
-    def test_post__when_food_name_already_exists__expect_ValidationError(self):
-        Profile.objects.filter(pk=self.user.pk).update(is_staff=True)
-        request_data = {"name": self.admin_food.name, "is_admin": True, "profile": ""}
-        response = self.client.post(self.__VALID_ADMIN_FOOD_URL, data=request_data)
-        expected_errors = "Food with this name already exist!"
 
-        self.assertFormError(response, form="form", field="__all__", errors=expected_errors)
-        self.__MODEL.objects.all().delete()
-        self.__FOOD_MODEL.objects.all().delete()

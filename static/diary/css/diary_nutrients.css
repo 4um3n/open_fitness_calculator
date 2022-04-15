@@ -28,40 +28,41 @@
 }
 
 .nutrient-wrapper {
-    margin: 10px auto;
+    margin: 14px auto;
     padding: 1px 5px;
-    border-radius: 8px;
-    box-shadow: 0 3px 7px -3px rgba(0, 0, 0, 1);
+    /*border-radius: 8px;*/
+    box-shadow: 0 5px 8px -9px rgba(0, 0, 0, 1);
 }
 
 .nutrient {
     font-size: 21px;
-    display: flex;
+    display: flex !important;
     justify-content: space-between;
     margin: 0;
+    height: fit-content !important;
 }
 
 .data {
     color: rgb(1, 142, 224);
 }
 
-.data.protein {
+.data.data_protein {
     color: rgba(1, 114, 80, 1);
 }
 
-.data.carbohydrates,
-.data.fibers,
-.data.sugars {
+.data.data_carbohydrates,
+.data.data_fibers,
+.data.data_sugars {
     color: rgba(255, 128, 0, 1);
 
 }
 
-.data.fat,
-.data.saturated,
-.data.monounsaturated,
-.data.polyunsaturated,
-.data.trans,
-.data.cholesterol {
+.data.data_fat,
+.data.data_saturated,
+.data.data_monounsaturated,
+.data.data_polyunsaturated,
+.data.data_trans,
+.data.data_cholesterol {
     color: rgba(255, 0, 98, 1);
 }
 

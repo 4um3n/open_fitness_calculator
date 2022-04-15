@@ -13,7 +13,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from open_fitness_calculator.diary.models import Diary
 from open_fitness_calculator.food.models import Food, DiaryFood
 from open_fitness_calculator.food.serializers import FoodSerializer
-from open_fitness_calculator.core.mixins import GetOpenFoodMixin, FoodMacrosConvertorMixin
+from open_fitness_calculator.core.mixins import GetOpenFoodMixin, FoodMacrosConvertorMixin, FoodPreSaveValidatorMixin
 from open_fitness_calculator.food.forms import FoodForm, SearchFoodForm, FoodQuantityForm, AdminFoodForm
 from django.views.generic import CreateView, UpdateView, FormView, RedirectView, DetailView, DeleteView
 
@@ -25,24 +25,29 @@ class BaseFoodView(DetailView):
     model = Food
     pk_url_kwarg = "food_pk"
 
-    def get_context_data(self, **kwargs):
-        context = super(BaseFoodView, self).get_context_data(**kwargs)
-        food = self.get_object()
-        p, c, f = food.get_percents_form_macros()
-        context.update({
+    def get_extra_context_data(self, **kwargs):
+        food = kwargs.get("food") or self.get_object()
+        protein_percents, carbs_percents, fat_percents = food.get_percents_form_macros()
+
+        self.extra_context = {
             "food": food,
             "meal": self.kwargs.get("meal"),
-            "protein_percents": round(p, 2),
-            "carbs_percents": round(c, 2),
-            "fat_percents": round(f, 2),
-        })
-        return context
+            "protein_percents": round(protein_percents, 2),
+            "carbs_percents": round(carbs_percents, 2),
+            "fat_percents": round(fat_percents, 2),
+        }
+
+        return self.extra_context
 
 
 class LogFoodView(BaseFoodView, FormView):
     form_class = FoodQuantityForm
     template_name = "food/log_food.html"
     success_url = reverse_lazy("profile diary")
+
+    def get_context_data(self, **kwargs):
+        self.get_extra_context_data()
+        return super(LogFoodView, self).get_context_data(**kwargs)
 
     def form_valid(self, form):
         diary = get_object_or_404(Diary, pk=self.kwargs.get("diary_pk"))
@@ -73,20 +78,23 @@ class DiaryFoodView(UpdateView):
     def get_context_data(self, **kwargs):
         meal = self.get_object()
         self.extra_context = meal.get_nutrients_by_quantity()
+        energy = self.extra_context.get("energy")
+        protein = self.extra_context.get("protein")
+        carbs = self.extra_context.get("carbs")
+        fat = self.extra_context.get("fat")
 
-        p, c, f = meal.food.get_percents_form_macros(
-            self.extra_context.get("energy"),
-            self.extra_context.get("protein"),
-            self.extra_context.get("carbs"),
-            self.extra_context.get("fat"),
+        protein_percents, carbs_percents, fat_percents = meal.food.get_percents_form_macros(
+            energy, protein, carbs, fat
         )
+
         self.extra_context.update({
-            "protein_percents": round(p, 2),
-            "carbs_percents": round(c, 2),
-            "fat_percents": round(f, 2),
+            "protein_percents": round(protein_percents, 2),
+            "carbs_percents": round(carbs_percents, 2),
+            "fat_percents": round(fat_percents, 2),
             "meal": meal,
             "diary_pk": self.kwargs.get("diary_pk"),
         })
+
         return super(DiaryFoodView, self).get_context_data(**kwargs)
 
 
@@ -157,18 +165,20 @@ class ListUserFoodView(FormView):
         return self.render_to_response(self.get_context_data(food=food))
 
 
-class FoodView(BaseFoodView, UpdateView):
+class FoodView(BaseFoodView, UpdateView, FoodPreSaveValidatorMixin):
     form_class = AdminFoodForm
     template_name = "food/user_food.html"
     success_url = reverse_lazy("list user food")
-    initial = {
-        "is_admin": True,
-        "profile": None,
-    }
+    initial = {"is_admin": True, "profile": None,}
+
+    def get_context_data(self, **kwargs):
+        self.get_extra_context_data()
+        return super(FoodView, self).get_context_data(**kwargs)
 
     def post(self, request, *args, **kwargs):
         profile = request.user.profile
         form = self.get_form()
+
         if not profile.is_admin and not profile.is_staff:
             form.add_error("__all__", "You have no permissions to do that!")
             return self.form_invalid(form)
@@ -176,29 +186,38 @@ class FoodView(BaseFoodView, UpdateView):
         return super(FoodView, self).post(request, *args, **kwargs)
 
     def form_valid(self, form):
-        food_names = [f.name for f in Food.objects.filter(is_admin=True)]
-        if form.cleaned_data.get("name") in food_names:
-            form.add_error("__all__", "Food with this name already exist!")
+        food_name = form.cleaned_data.get("name")
+
+        if self.food_name_exists(food_name, is_admin=True):
+            form.add_error("name", "Food with that name already exists")
             return self.form_invalid(form)
 
         return super(FoodView, self).form_valid(form)
 
 
 @method_decorator(login_required, name="dispatch")
-class CreateFoodView(CreateView):
+class CreateFoodView(CreateView, FoodPreSaveValidatorMixin):
+    model = Food
     form_class = FoodForm
     template_name = "food/user_food_create.html"
     success_url = reverse_lazy("list user food")
 
     def form_valid(self, form):
         food = form.save(commit=False)
+        food_name = food.name
+        profile = self.request.user.profile
+
+        if self.food_name_exists(food_name, profile=profile):
+            form.add_error("name", "Food with that name already exists")
+            return self.form_invalid(form)
+        
         food.profile = self.request.user.profile
         food.save()
         return redirect(self.success_url)
 
 
 @method_decorator(login_required, name="dispatch")
-class UpdateFoodView(UpdateView):
+class UpdateFoodView(UpdateView, FoodPreSaveValidatorMixin):
     model = Food
     form_class = FoodForm
     pk_url_kwarg = "food_pk"
@@ -207,6 +226,22 @@ class UpdateFoodView(UpdateView):
     def get_success_url(self):
         kwargs = {"food_pk": self.kwargs.get("food_pk")}
         return reverse_lazy("food", kwargs=kwargs)
+    
+    def form_valid(self, form):
+        food = self.get_object()
+        food_name = form.cleaned_data.get("name")
+
+        if food_name != food.name:
+            if getattr(food, "is_admin"):
+                kwargs = {"is_admin": True}
+            else:
+                kwargs = {"profile": self.request.user.profile}
+    
+            if self.food_name_exists(food_name, **kwargs):
+                form.add_error("name", "Food with that name already exists")
+                return self.form_invalid(form)
+        
+        return super(UpdateFoodView, self).form_valid(form)
 
 
 @method_decorator(login_required, name="dispatch")
@@ -225,7 +260,7 @@ class DeleteFoodView(DeleteView):
 
 
 @method_decorator(login_required, name="dispatch")
-class SaveLocallyOpenFoodView(CreateView, GetOpenFoodMixin, FoodMacrosConvertorMixin):
+class SaveLocallyOpenFoodView(CreateView, GetOpenFoodMixin, FoodMacrosConvertorMixin, FoodPreSaveValidatorMixin):
     model = Food
     form_class = FoodForm
     template_name = "food/save_open_food.html"
@@ -238,18 +273,21 @@ class SaveLocallyOpenFoodView(CreateView, GetOpenFoodMixin, FoodMacrosConvertorM
         food_data = self.get_food_by_id(self.kwargs.get("food_pk"))
         self.extra_context = food_data.copy()
         self.initial = food_data.copy()
+        energy = food_data.get("energy")
+        protein = food_data.get("protein")
+        carbs = food_data.get("carbs")
+        fat = food_data.get("fat")
 
-        p_percents, c_percents, f_percents = self.get_percents_form_macros(
-            food_data.get("energy"),
-            food_data.get("protein"),
-            food_data.get("carbs"),
-            food_data.get("fat"),
+        protein_percents, carbs_percents, fat_percents = self.get_percents_form_macros(
+            energy, protein, carbs, fat
         )
+
         self.extra_context.update({
-            "protein_percents": p_percents,
-            "carbs_percents": c_percents,
-            "fat_percents": f_percents,
+            "protein_percents": protein_percents,
+            "carbs_percents": carbs_percents,
+            "fat_percents": fat_percents,
         })
+
         return super(SaveLocallyOpenFoodView, self).get_context_data(**kwargs)
 
     def get_form_kwargs(self):
@@ -260,9 +298,10 @@ class SaveLocallyOpenFoodView(CreateView, GetOpenFoodMixin, FoodMacrosConvertorM
 
     def form_valid(self, form):
         food = form.save(commit=False)
+        food_name = form.cleaned_data.get("name")
+        profile = self.request.user.profile
 
-        user_food_names = [f.name.lower() for f in self.model.objects.filter(profile=self.request.user.profile)]
-        if form.cleaned_data.get("name").lower() in user_food_names:
+        if self.food_name_exists(food_name, profile=profile):
             form.add_error("name", "Food with that name already exists")
             return self.form_invalid(form)
 

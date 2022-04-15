@@ -22,7 +22,7 @@ from open_fitness_calculator.settings import MEDIA_URL, MEDIA_ROOT
 urlpatterns = [
                   path('admin/', admin.site.urls),
                   path('api/auth/', include('djoser.urls.authtoken')),
-                  path('fitness-calculator/auth/', include("open_fitness_calculator.fitness_calculator_auth.urls")),
+                  path('user/auth/', include("open_fitness_calculator.fitness_calculator_auth.urls")),
                   path('', include("open_fitness_calculator.core.urls")),
                   path('profile/', include("open_fitness_calculator.profiles.urls")),
                   path('food/', include("open_fitness_calculator.food.urls")),

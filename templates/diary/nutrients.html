@@ -21,13 +21,13 @@
         <section class="nutrients-wrapper">
             {% for name, nut in nutrients.items %}
                 <article class="nutrient-wrapper">
-                    <div class="nutrient {{ name }}">
+                    <div class="nutrient nutrient_{{ name }}">
                         <label for="#" class="nutrient-name">
                             {{ name }}
                         </label>
                         <div class="nutrient-nutrients">
                             {% for n in nut %}
-                                <span class="data {{ name }}">
+                                <span class="data data_{{ name }}">
                                     {{ n|floatformat:0 }}{% if name in mg_fields %}mg{% elif name in percents_fields %}%{% else %}g{% endif %}
                                 </span>
                             {% endfor %}

@@ -131,11 +131,9 @@ CLOUDINARY_STORAGE = {
     'API_KEY': os.environ.get("CLOUDINARY_API_KEY"),
     'API_SECRET': os.environ.get("CLOUDINARY_API_SECRET"),
 }
-
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 AUTH_USER_MODEL = "fitness_calculator_auth.FitnessCalculatorUser"
-
 LOGIN_URL = reverse_lazy("sign in")
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

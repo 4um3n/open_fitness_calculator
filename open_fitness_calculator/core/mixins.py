@@ -2,6 +2,7 @@ import os
 import requests
 from collections import deque
 from cloudinary import uploader
+from django.core.exceptions import ImproperlyConfigured
 from matplotlib import pyplot as plt
 from django.shortcuts import redirect
 from open_fitness_calculator.settings import BASE_DIR
@@ -98,6 +99,20 @@ class DailyCaloriesCalculatorMixin:
         fat_grams = (self.daily_calories * fat_percents) // 9
         fat_saturated_grams = (self.daily_calories * 0.06) // 9 if fat_grams else 0
         return protein_grams, carbs_grams, carbs_sugar_grams, fiber, fat_grams, fat_saturated_grams
+
+
+class FoodPreSaveValidatorMixin:
+    model = None
+    __error_msg = "{model} is missing a model. Define {model}.model"
+
+    def food_name_exists(self, name: str, **kwargs) -> bool or None:
+        if self.model is None:
+            error_msg = self.__error_msg.format(model=type(self).__name__)
+            raise ImproperlyConfigured(error_msg)
+        
+        for food in self.model.objects.filter(**kwargs):
+            if name.lower() == food.name.lower():
+                return True
 
 
 class PieChartCreationMixin:
