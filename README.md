@@ -7,7 +7,7 @@ This is OpenFitnessCalculator Django app that uses
 [OpenFitnessCalculator](https://github.com/4um3n/open_fitness_calculator).**
 
 You can view a working version of this app
-[here]().
+[here](https://openfitnesscalculator.tk/).
 Running this app on your local machine in development will work as
 well.
 

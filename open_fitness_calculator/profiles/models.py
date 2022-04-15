@@ -79,8 +79,6 @@ class Profile(models.Model):
         overwrite=True,
         resource_type="image",
         transformation={"quality": "auto:eco"},
-        format="png",
-        blank=True,
     )
 
     @property

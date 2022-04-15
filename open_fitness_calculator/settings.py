@@ -14,7 +14,7 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 DEBUG = os.environ.get("DEBUG")
 
 ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS").split()
-
+CSRF_TRUSTED_ORIGINS = os.environ.get("CSRF_TRUSTED_ORIGINS").split()
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -26,6 +26,7 @@ INSTALLED_APPS = [
 
     "djoser",
     "cloudinary",
+    "cloudinary_storage",
     "rest_framework",
     'rest_framework.authtoken',
     "open_fitness_calculator.fitness_calculator_auth",
@@ -125,11 +126,11 @@ STATICFILES_DIRS = [
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
-cloudinary.config(
-  cloud_name=os.environ.get("CLOUDINARY_CLOUD_NAME"),
-  api_key=os.environ.get("CLOUDINARY_API_KEY"),
-  api_secret=os.environ.get("CLOUDINARY_API_SECRET")
-)
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': os.environ.get("CLOUDINARY_CLOUD_NAME"),
+    'API_KEY': os.environ.get("CLOUDINARY_API_KEY"),
+    'API_SECRET': os.environ.get("CLOUDINARY_API_SECRET"),
+}
 
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
@@ -138,4 +139,3 @@ AUTH_USER_MODEL = "fitness_calculator_auth.FitnessCalculatorUser"
 LOGIN_URL = reverse_lazy("sign in")
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-

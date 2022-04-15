@@ -1,7 +1,4 @@
-import os
-
 from django.db import models
-from cloudinary import uploader
 from cloudinary import models as cloudinary_models
 from django.core.validators import MinValueValidator
 

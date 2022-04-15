@@ -202,7 +202,6 @@ class CaloriesPieChart(models.Model, BaseDiaryCaloriesPieChartMixin):
         overwrite=True,
         resource_type="image",
         transformation={"quality": "auto:eco"},
-        format="png",
     )
 
     @property
@@ -237,7 +236,6 @@ class MacrosPieChart(models.Model, BaseDiaryMacrosPieChartMixin):
         overwrite=True,
         resource_type="image",
         transformation={"quality": "auto:eco"},
-        format="png",
     )
 
     @property

@@ -13,7 +13,7 @@ def food_post_save__create_food_pie_chart(sender, instance, *args, **kwargs):
 
 
 @receiver(post_save, sender=Food)
-def food_post_save__create_food_pie_chart(sender, instance, *args, **kwargs):
+def food_post_save__reset_diary_pie_charts(sender, instance, *args, **kwargs):
     for diary_food in instance.diaryfood_set.all():
         diary_food.diary.caloriespiechart.reset_pie_chart()
         diary_food.diary.macrospiechart.reset_pie_chart()
@@ -26,7 +26,7 @@ def food_pre_delete__delete_foodpiechart_image(sender, instance, *args, **kwargs
 
 
 @receiver(post_save, sender=DiaryFood)
-def diary_food_pre_save__reset_diary_pie_charts(sender, instance, *args, **kwargs):
+def diary_food_post_save__reset_diary_pie_charts(sender, instance, *args, **kwargs):
     instance.diary.caloriespiechart.reset_pie_chart()
     instance.diary.macrospiechart.reset_pie_chart()
 

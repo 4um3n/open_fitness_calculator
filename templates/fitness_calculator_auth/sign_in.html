@@ -4,7 +4,7 @@
 {% endblock %}
 {% block main %}
     <div class="form-wrapper">
-        <form method="post" class="auth-form">
+        <form action="{% url "sign in" %}" method="post" class="auth-form">
             <div class="nav-wrapper auth">
                 <a href="{% url "sign in" %}" class="heading-register">
                     <i class="fas fa-key"></i>
