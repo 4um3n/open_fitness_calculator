@@ -1,3 +1,4 @@
+import requests
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.shortcuts import redirect, get_object_or_404
@@ -11,6 +12,7 @@ from open_fitness_calculator.fitness_calculator_auth.models import FitnessCalcul
 from django.views.generic import CreateView, FormView, RedirectView, UpdateView, DeleteView
 from open_fitness_calculator.fitness_calculator_auth.forms import SignUpForm, SignInForm, \
     UpdateUserCredentialsForm, UpdateUserPasswordForm, RequirePasswordForm
+from open_fitness_calculator.settings import ALLOWED_HOSTS, DEBUG
 
 
 @method_decorator(unauthenticated_required, name="dispatch")
@@ -49,6 +51,10 @@ class SignOutView(RedirectView):
 class RequirePasswordView(FormView):
     form_class = RequirePasswordForm
     template_name = "fitness_calculator_auth/require_password.html"
+    __redirect_mapper = {
+        "GET": lambda url: requests.get(url),
+        "POST": lambda url: requests.post(url),
+    }
 
     def get_form_kwargs(self):
         kwargs = super(RequirePasswordView, self).get_form_kwargs()
@@ -98,6 +104,7 @@ class UserPasswordUpdateView(FormView):
 
 
 @method_decorator(login_required, name="dispatch")
+@method_decorator(password_required, name="dispatch")
 class UserDeleteView(DeleteView):
     object = None
     model = FitnessCalculatorUser
