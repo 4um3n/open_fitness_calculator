@@ -12,7 +12,7 @@ well.
 It is best to use the python `python3-venv` tool to build locally:
 
 <pre>
-$ touch .env # put your environment variables here: <a href="#" >example</a>
+$ touch .env # put your environment variables here: <a href="https://github.com/4um3n/open_fitness_calculator/blob/main/example.env" >example</a>
 $ mkdir -p venv
 $ python3 -m venv .venv/
 $ source venv/bin/activate
