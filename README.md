@@ -1,10 +1,9 @@
 # OpenFitnessCalculator Django App
 
-This is OpenFitnessCalculator Django app that uses
-[OpenFoodRepoAPI](https://www.foodrepo.org/api-docs/swaggers/v3#/) to search for food. 
+This is OpenFitnessCalculator Django app that uses [OpenFoodRepoAPI](https://www.foodrepo.org/api-docs/swaggers/v3#/) to search for food. 
 
-You can view a working version of this app
-[here](https://openfitnesscalculator.tk/).
+You can view a working version of this app [here](https://openfitnesscalculator.tk/).
+
 Running this app on your local machine in development will work as
 well.
 
@@ -12,15 +11,15 @@ well.
 ## Building
 It is best to use the python `python3-venv` tool to build locally:
 
-```sh
-$ touch .env # put your environment variables here: example => export DB_PORT=5432 
+<pre>
+$ touch .env # put your environment variables here: <a href="#" >example</a>
 $ mkdir -p venv
 $ python3 -m venv .venv/
 $ source venv/bin/activate
 $ source .env
 $ pip3 install -r requirements.txt
 $ python manage.py runserver
-```
+</pre>
 
 Then visit `http://localhost:8000` to view the app.
 

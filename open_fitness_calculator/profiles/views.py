@@ -1,6 +1,3 @@
-from cloudinary import uploader, CloudinaryResource
-from django.contrib.auth import get_user
-from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.shortcuts import get_object_or_404
 from django.utils.decorators import method_decorator

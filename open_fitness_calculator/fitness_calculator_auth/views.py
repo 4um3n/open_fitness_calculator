@@ -12,7 +12,6 @@ from open_fitness_calculator.fitness_calculator_auth.models import FitnessCalcul
 from django.views.generic import CreateView, FormView, RedirectView, UpdateView, DeleteView
 from open_fitness_calculator.fitness_calculator_auth.forms import SignUpForm, SignInForm, \
     UpdateUserCredentialsForm, UpdateUserPasswordForm, RequirePasswordForm
-from open_fitness_calculator.settings import ALLOWED_HOSTS, DEBUG
 
 
 @method_decorator(unauthenticated_required, name="dispatch")
