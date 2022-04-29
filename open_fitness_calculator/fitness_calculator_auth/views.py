@@ -1,4 +1,5 @@
 import requests
+from django.contrib.auth.hashers import is_password_usable
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.shortcuts import redirect, get_object_or_404
@@ -22,7 +23,11 @@ class SignUpView(CreateView):
 
     def form_valid(self, form):
         user = form.save()
-        login(self.request, user)
+        login(
+            self.request,
+            user,
+            backend="open_fitness_calculator.fitness_calculator_auth.auth.EmailOrUsernameModelBackend"
+        )
         return redirect(self.success_url)
 
 
@@ -38,14 +43,6 @@ class SignInView(FormView):
         return super(SignInView, self).form_valid(form)
 
 
-class SignOutView(RedirectView):
-    url = reverse_lazy("sign in")
-
-    def get(self, request, *args, **kwargs):
-        logout(self.request)
-        return super(SignOutView, self).get(request, *args, **kwargs)
-
-
 @method_decorator(login_required, name="dispatch")
 class RequirePasswordView(FormView):
     form_class = RequirePasswordForm
@@ -54,6 +51,11 @@ class RequirePasswordView(FormView):
         "GET": lambda url: requests.get(url),
         "POST": lambda url: requests.post(url),
     }
+    
+    def get(self, request, *args, **kwargs):
+        if not is_password_usable(request.user.password):
+            return self.form_valid(None)
+        return super(RequirePasswordView, self).get(request, *args, **kwargs)
 
     def get_form_kwargs(self):
         kwargs = super(RequirePasswordView, self).get_form_kwargs()

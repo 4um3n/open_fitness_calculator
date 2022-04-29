@@ -31,6 +31,32 @@ class SignUpForm(UserCreationForm, FormFieldsController):
             validate_password_contain_lowercase_letter,
         ],
     }
+    widgets_attrs = {
+        "username": {
+            "onfocus":
+                "googleLikePlaceholderHandler('', 'id_username', 'id_username_legend')",
+            "onblur":
+                "googleLikePlaceholderHandler('Username', 'id_username', 'id_username_legend')",
+        },
+        "email": {
+            "onfocus":
+                "googleLikePlaceholderHandler('', 'id_email', 'id_email_legend')",
+            "onblur":
+                "googleLikePlaceholderHandler('Email', 'id_email', 'id_email_legend')",
+        },
+        "password1": {
+            "onfocus":
+                "googleLikePlaceholderHandler('', 'id_password1', 'id_password1_legend')",
+            "onblur":
+                "googleLikePlaceholderHandler('Password', 'id_password1', 'id_password1_legend')",
+        },
+        "password2": {
+            "onfocus":
+                "googleLikePlaceholderHandler('', 'id_password2', 'id_password2_legend')",
+            "onblur":
+                "googleLikePlaceholderHandler('Confirm Password', 'id_password2', 'id_password2_legend')",
+        },
+    }
 
     class Meta:
         model = FitnessCalculatorUser
@@ -45,8 +71,22 @@ class SignInForm(AuthenticationForm, FormFieldsController):
     authenticated_user = None
     class_name = "form-control auth"
     placeholders = {
-        "username": "Username/Email",
+        "username": "Email address or username",
         "password": "Password",
+    }
+    widgets_attrs = {
+        "username": {
+            "onfocus":
+                "googleLikePlaceholderHandler('', 'id_username', 'id_username_legend')",
+            "onblur":
+                "googleLikePlaceholderHandler('Email address or username', 'id_username', 'id_username_legend')",
+        },
+        "password": {
+            "onfocus":
+                "googleLikePlaceholderHandler('', 'id_password', 'id_password_legend')",
+            "onblur":
+                "googleLikePlaceholderHandler('Password', 'id_password', 'id_password_legend')",
+        },
     }
 
     def __init__(self, *args, **kwargs):

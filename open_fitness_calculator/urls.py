@@ -21,6 +21,7 @@ from open_fitness_calculator.settings import MEDIA_URL, MEDIA_ROOT
 
 urlpatterns = [
                   path('admin/', admin.site.urls),
+                  path('accounts/', include('allauth.urls')),
                   path('api/auth/', include('djoser.urls.authtoken')),
                   path('user/auth/', include("open_fitness_calculator.fitness_calculator_auth.urls")),
                   path('', include("open_fitness_calculator.core.urls")),

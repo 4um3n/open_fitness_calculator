@@ -9,7 +9,8 @@ class UserDeleteViewTests(TestCase):
     __USER_MODEL = get_user_model()
     __VALID_TEMPLATE_NAME = "profile/profile_delete.html"
     __VALID_URL = reverse("user delete")
-    __VALID_REDIRECT_URL = reverse("sign in")
+    __VALID_REDIRECT_URL = reverse("password required")
+    __VALID_POST_REDIRECT_URL = reverse("sign in")
     __VALID_USER_CREDENTIALS = {
         "username": "test",
         "email": "test@gmail.com",
@@ -24,11 +25,18 @@ class UserDeleteViewTests(TestCase):
         self.client.login(**self.__VALID_USER_CREDENTIALS)
 
     def test_get__expect_correct_template_used(self):
+        request_data = {"password": self.__VALID_USER_CREDENTIALS.get("password")}
+        url = f"{self.__VALID_REDIRECT_URL}?next={self.__VALID_URL}"
+        self.client.post(url, data=request_data)
         response = self.client.get(self.__VALID_URL)
+
         self.assertTemplateUsed(response, self.__VALID_TEMPLATE_NAME)
         self.__USER_MODEL.objects.all().delete()
 
     def test_get__expect_correct_context(self):
+        request_data = {"password": self.__VALID_USER_CREDENTIALS.get("password")}
+        url = f"{self.__VALID_REDIRECT_URL}?next={self.__VALID_URL}"
+        self.client.post(url, data=request_data)
         response = self.client.get(self.__VALID_URL)
         self.assertEqual(self.user.profile, response.context_data.get("profile"))
         self.assertTrue(isinstance(response.context_data.get("form"), self.__VALID_PROFILE_FORM_CLASS))
@@ -40,4 +48,4 @@ class UserDeleteViewTests(TestCase):
         user_exists = self.__USER_MODEL.objects.filter(pk=self.user.pk).exists()
 
         self.assertFalse(user_exists)
-        self.assertRedirects(response, self.__VALID_REDIRECT_URL)
+        self.assertRedirects(response, self.__VALID_POST_REDIRECT_URL)

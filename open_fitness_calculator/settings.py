@@ -24,6 +24,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    "allauth",
+    "allauth.account",
+    "allauth.socialaccount",
+    "allauth.socialaccount.providers.google",
     "djoser",
     "cloudinary",
     "cloudinary_storage",
@@ -49,7 +53,25 @@ MIDDLEWARE = [
 
 AUTHENTICATION_BACKENDS = [
     "open_fitness_calculator.fitness_calculator_auth.auth.EmailOrUsernameModelBackend",
+    "allauth.account.auth_backends.AuthenticationBackend",
 ]
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': [
+            'profile',
+            'email',
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'online',
+        }
+    }
+}
+
+SITE_ID = 1
+
+LOGIN_REDIRECT_URL = reverse_lazy('home')
+LOGOUT_REDIRECT_URL = reverse_lazy("sign in")
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -134,6 +156,7 @@ CLOUDINARY_STORAGE = {
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 AUTH_USER_MODEL = "fitness_calculator_auth.FitnessCalculatorUser"
+
 LOGIN_URL = reverse_lazy("sign in")
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

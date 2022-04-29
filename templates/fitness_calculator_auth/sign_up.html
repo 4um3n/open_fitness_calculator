@@ -5,6 +5,8 @@
 {% block main %}
     <div class="form-wrapper">
         <form action="{% url "sign up" %}" method="post" class="auth-form">
+            {% csrf_token %}
+
             <div class="nav-wrapper auth">
                 <a href="{% url "sign in" %}" class="heading-login">
                     <i class="fas fa-key"></i>
@@ -15,14 +17,30 @@
                     Sign Up
                 </a>
             </div>
-            {% csrf_token %}
-            {{ form.username }}
+
+            <fieldset class="form-control-wrapper auth">
+                <legend id="id_username_legend" hidden="hidden" >Username</legend>
+                {{ form.username }}
+            </fieldset>
             {{ form.username.errors }}
-            {{ form.email }}
+
+            <fieldset class="form-control-wrapper auth">
+                <legend id="id_email_legend" hidden="hidden" >Email</legend>
+                {{ form.email }}
+            </fieldset>
             {{ form.email.errors }}
-            {{ form.password1 }}
+
+            <fieldset class="form-control-wrapper auth">
+                <legend id="id_password1_legend" hidden="hidden" >Password</legend>
+                {{ form.password1 }}
+            </fieldset>
             {{ form.password2.errors }}
-            {{ form.password2 }}
+
+            <fieldset class="form-control-wrapper auth">
+                <legend id="id_password2_legend" hidden="hidden" >Confirm Password</legend>
+                {{ form.password2 }}
+            </fieldset>
+
             <input type="submit" class="btn btn-primary auth" value="Sign Up">
         </form>
     </div>

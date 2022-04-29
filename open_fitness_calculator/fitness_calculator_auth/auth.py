@@ -23,3 +23,4 @@ class EmailOrUsernameModelBackend(ModelBackend):
                 return user
         except self.__USER_MODEL.DoesNotExist:
             return None
+

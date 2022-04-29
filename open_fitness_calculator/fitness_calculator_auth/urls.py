@@ -1,11 +1,12 @@
 from django.urls import path
-from open_fitness_calculator.fitness_calculator_auth.views import SignUpView, SignInView, SignOutView, \
+from django.contrib.auth.views import LogoutView
+from open_fitness_calculator.fitness_calculator_auth.views import SignUpView, SignInView, \
     UserCredentialsUpdateView, UserDeleteView, UserPasswordUpdateView, RequirePasswordView
 
 urlpatterns = [
     path('sign-up/', SignUpView.as_view(), name="sign up"),
     path('sign-in/', SignInView.as_view(), name="sign in"),
-    path('sign-out/', SignOutView.as_view(), name="sign out"),
+    path('sign-out/', LogoutView.as_view(), name="sign out"),
     path(
         'password-required/',
         RequirePasswordView.as_view(),

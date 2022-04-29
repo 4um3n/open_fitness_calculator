@@ -1,7 +1,7 @@
 @media only screen and (min-device-width: 300px) and (max-device-width: 700px) {
     .heading-register,
     .heading-login {
-        font-size: 50px !important;
+        font-size: 40px !important;
     }
 
     .heading-register i,
@@ -14,7 +14,7 @@
     }
 
     .form-control.auth {
-        font-size: 45px !important;
+        font-size: 40px !important;
         margin: 14px 0 !important;
         padding: 18px 0 18px 10px !important;
         border-radius: 8px !important;
@@ -22,7 +22,7 @@
     }
 
     .btn.auth {
-        font-size: 45px !important;
+        font-size: 40px !important;
         padding: 14px 0 !important;
     }
 }
@@ -86,22 +86,30 @@ body.auth {
     margin: 0;
 }
 
-.form-control.auth {
-    font-family: Sony, sans-serif;
+.form-control-wrapper.auth {
     width: 100%;
     box-sizing: border-box;
     color: rgba(54, 50, 65, 1);
-    border: none;
-    box-shadow: 0 2px 7px -3px rgba(0, 0, 0, 1);
+    border: 1px solid rgba(0, 0, 0, 0.25);
     border-radius: 4px;
     margin: 5px 0;
+    padding: 0;
+    background: rgba(255, 255, 255, 1);
+}
+
+.form-control.auth {
+    box-sizing: border-box;
+    font-family: Sony, sans-serif;
+    margin: 0;
     padding: 8px 0 8px 10px;
     font-size: 21px;
+    border: none;
+    border-radius: 4px;
+    width: 100%;
 }
 
 .form-control.auth:focus {
     outline: 0;
-    box-shadow: 0 3px 7px -3px rgba(0, 0, 0, 1);
 }
 
 .nav-wrapper.auth {
@@ -132,8 +140,19 @@ body.auth {
 
 
 .btn.auth {
+    margin: 10px 0 0 0 !important;
     padding: 5px 0;
     font-size: 21px;
     font-weight: bold;
     width: 100%;
+}
+
+.btn.auth.google {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+}
+
+.btn.auth.google i {
+    margin-right: 10px;
 }
